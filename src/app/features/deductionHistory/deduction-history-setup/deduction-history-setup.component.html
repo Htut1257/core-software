@@ -1,0 +1,100 @@
+<mat-card> 
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutGap="10px" class="container">
+        <span>Deduction Assign Setup</span>
+      
+        <span fxFlex></span>
+        <button  mat-stroked-button [routerLink]="['/main/deduction-assign']" (click)="onBacktoList()">Back</button>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-divider></mat-divider><br>
+      <form class="form" role="form" (ngSubmit)="onSaveDeductionHistory()" [formGroup]="deductionHisForm" >
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Deduction Assign ID</mat-label>
+            <input matInput [(ngModel)]="deductionHis.deductionHisId" name="deductionHisId"  [ngModelOptions]="{standalone:true}"
+            disabled="{{ (deductionHisId=='') ? false:true }}"  
+            >
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline" >
+            <mat-label>Remark</mat-label>
+            <input matInput [(ngModel)]="deductionHis.remark" name="remark"  [ngModelOptions]="{standalone:true}">
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+        fxLayout="row" 
+        fxFlexFill fxLayout.lt-sm="column" 
+        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+      >
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+          <mat-label>Deduction </mat-label>
+          <mat-select [(ngModel)]="deductionHis.deduction" name="deduction" formControlName="deduction" [compareWith]="compareDeduction" >
+            <mat-option *ngFor="let item of deduction" [value]="item">
+              {{item.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Employee</mat-label>
+            <mat-select [(ngModel)]="deductionHis.employee" name="employee" formControlName="employee" [compareWith]="compareEmployee" >
+              <mat-option *ngFor="let item of employee" [value]="item">
+                {{item.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+        fxLayout="row" 
+        fxFlexFill fxLayout.lt-sm="column" 
+        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+      >
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Deduction Date</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="deductionHis.deductionDate" formControlName="deductionDate" name="deductionDate"  >
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput [(ngModel)]="deductionHis.amount" name="amount"  [ngModelOptions]="{standalone:true}">
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+          fxLayout="row" 
+          fxFlexFill 
+          fxLayout.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <span fxFlex></span>
+          <span class="title-name">{{ (deductionHisId=='') ? ' New ':' Edit ' }}</span>
+        </div>
+        <br><mat-divider></mat-divider><br>
+        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
+          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!deductionHisForm.valid" >
+            {{ (deductionHisId=='') ? 'Add':'Save' }}
+          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
+        </div>
+        </form> 
+    </mat-card-content>
+    <mat-card-footer>
+      
+    </mat-card-footer>
+  </mat-card>
+  

@@ -1,0 +1,54 @@
+<p>holiday works!</p>
+<mat-card>
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutGap="10px" class="container">
+        <span>Holiday List</span>
+        <span fxFlex></span>
+        <button mat-stroked-button [routerLink]="['/main/holiday-setup']">New Holiday</button>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div fxlayout="row" fxFlexFill>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+        </mat-form-field>
+      </div>
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+          <td mat-cell *matCellDef="let element;let i=index">{{i+1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+          <td mat-cell *matCellDef="let element">{{element.holidayId}}</td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td mat-cell *matCellDef="let element">{{element.description}}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let element">{{element.holidayDate |date:'dd/MM/yyyy'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" checked="{{element.active}}" disabled></mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-button (click)="getHolidayDataRow(element)">edit</button>
+            <button mat-button (click)="removeHoliday(element)">delete</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+        <tr mat-row *matRowDef="let row;columns:displayedColumns" (dblclick)="getHolidayDataRow(row)"></tr>
+      </table>
+    </mat-card-content>
+    <mat-card-footer>
+  
+    </mat-card-footer>
+  </mat-card>

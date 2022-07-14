@@ -1,0 +1,77 @@
+<mat-card>
+    <mat-card-title>
+        <div fxLayout="row" fxLayoutGap="10px" class="container">
+            <span>Shift Setup</span>
+
+            <span fxFlex></span>
+            <button mat-stroked-button [routerLink]="['/main/leave']" (click)="onBacktoList()">Back</button>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-divider></mat-divider><br>
+        <form class="form" role="form" (ngSubmit)="onSaveShift(shiftForm.value)" [formGroup]="shiftForm">
+            <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+                fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+                <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+                <mat-form-field fxFlex appearance="outline">
+                    <mat-label>Shift ID</mat-label>
+                    <input matInput formControlName="shiftId" name="shiftId">
+                </mat-form-field>
+                <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+                <mat-form-field fxFlex appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <input matInput name="description" formControlName="description">
+                </mat-form-field>
+                <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
+                fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+                <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+                <div fxFlex class="time-frame">
+                    <label>Start Time</label>
+                    <ngx-mat-timepicker formControlName="startTime" name="startTime"></ngx-mat-timepicker>
+                </div>
+
+                <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+
+                <div fxFlex class="time-frame">
+                    <label>End Time</label>
+                    <ngx-mat-timepicker formControlName="endTime" name="endTime"></ngx-mat-timepicker>
+                </div>
+                <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px"
+                fxLayoutGap.xs="0%">
+                <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+                <section fxFlex class="example-section">
+                    <mat-checkbox class="chkDay" formControlName="mon" name="active" color="primary">Mon</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="thu" name="active" color="primary">Tue</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="wed" name="active" color="primary">Wed</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="thu" name="active" color="primary">Thu</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="fri" name="active" color="primary">Fri</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="sat" name="active" color="primary">Sat</mat-checkbox>
+                    <mat-checkbox class="chkDay" formControlName="sun" name="active" color="primary">Sun</mat-checkbox>
+                </section>
+            </div>
+            <div fxLayout="row" fxFlexFill fxLayout.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+                fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+                <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+                <span fxFlex></span>
+                <span class="title-name">{{ (shiftId=='') ? ' New ':' Edit ' }}</span>
+            </div>
+            <br>
+            <mat-divider></mat-divider><br>
+            <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+                <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
+                <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit">
+                    {{ (shiftId=='') ? 'Add':'Save' }}
+                </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+                <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
+            </div>
+        </form>
+
+    </mat-card-content>
+    <mat-card-footer>
+
+    </mat-card-footer>
+</mat-card>

@@ -1,0 +1,77 @@
+table {
+  width: 100%;
+}
+
+.pull-right {
+  float: right;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+tr.mat-row,
+tr.mat-footer-row,
+.cdk-header-row {
+  height: auto;
+}
+
+th.mat-header-cell {
+  font-size: large;
+  color: rgb(26, 17, 17);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: left;
+}
+
+.mat-header-cell,.mat-cell{
+  padding: 0.2%;
+}
+
+.mat-column-position,
+.mat-column-code,
+.mat-column-description,
+.mat-column-active,
+.mat-column-action {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.mat-column-position {
+  flex: 0 0 6% !important;
+  width: 6% !important;
+  text-align: right;
+}
+.mat-column-code {
+  flex: 0 0 10% !important;
+  width: 10% !important;
+}
+.mat-column-description {
+  flex: 0 0 30% !important;
+  width: 30% !important;
+}
+.mat-column-active {
+  flex: 0 0 10% !important;
+  width: 10% !important;
+}
+.mat-column-action {
+  flex: 0 0 10% !important;
+  width: 10% !important;
+}
+
+.delete-btn,
+.edit-btn {
+  margin-left: 5%;
+  padding: 0%;
+  width: auto;
+  min-width: 30px
+}
+.delete-btn {
+  color: aliceblue;
+  background-color: red;
+}

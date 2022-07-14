@@ -1,0 +1,78 @@
+<mat-card> 
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutGap="10px" class="container">
+        <span>Late Setup</span>
+      
+        <span fxFlex></span>
+        <button  mat-stroked-button [routerLink]="['/main/late']" (click)="onBacktoList()">Back</button>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-divider></mat-divider><br>
+      <form class="form" role="form" (ngSubmit)="onSaveLate()" [formGroup]="lateForm" >
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Late ID</mat-label>
+            <input matInput [(ngModel)]="late.lateId" name="lateId"  [ngModelOptions]="{standalone: true}"
+            disabled="{{ (lateId=='') ? false:true }}"  
+            >
+          </mat-form-field>
+          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline" >
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="late.description" name="description" formControlName="description">
+            <mat-error *ngIf="!lateForm.value.description">Please enter Description</mat-error>
+          </mat-form-field>
+          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+        fxLayout="row" 
+        fxFlexFill fxLayout.lt-sm="column" 
+        fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+      >
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+          <mat-label>Late Min</mat-label>
+          <input matInput [(ngModel)]="late.lateMin" name="lateMin" [ngModelOptions]="{standalone: true}"
+          
+          >
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline" >
+          <mat-label>Amount</mat-label>
+          <input matInput [(ngModel)]="late.amount" name="amount" [ngModelOptions]="{standalone: true}" >
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+      </div>
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <section fxFlex class="example-section">
+              <mat-checkbox class="example-margin" checked="{{late.active}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="late.active" name="active"color="primary">Active</mat-checkbox>
+          </section>
+          <span fxFlex></span>
+          <span class="title-name">{{ (lateId=='') ? ' New ':' Edit ' }}</span>
+        </div>
+        <br><mat-divider></mat-divider><br>
+        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
+          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!lateForm.valid" >
+            {{ (lateId=='') ? 'Add':'Save' }}
+          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
+        </div>
+        </form> 
+    </mat-card-content>
+    <mat-card-footer>
+      
+    </mat-card-footer>
+  </mat-card>
+  

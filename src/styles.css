@@ -1,1 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: grey !important;
+}
+
+::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.26) !important;
+}
+
+
+.float-right {
+  float: right;
+}
+
+
+/* ::: SM (Tablets and up) */
+@media (min-width: 315px) {
+
+  .table-container {
+    height: 400px;
+    overflow: auto;
+  }
+
+}
+
+/* ::: MD (Desktop and up) */
+@media (min-width: 992px) {
+
+  .table-container {
+    height: 560px;
+    overflow: auto;
+  }
+}
+
+/* ::: LG (Large desktop and up) */
+@media (min-width: 1200px) {
+
+  .table-container {
+    height: 667px;
+    overflow: auto;
+  }
+
+}

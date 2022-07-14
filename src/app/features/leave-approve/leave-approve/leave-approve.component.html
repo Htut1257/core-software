@@ -1,0 +1,67 @@
+<mat-card>
+    <mat-card-title>
+        <div fxLayout="row" fxLayoutGap="10px" class="container">
+            <span>Leave Approval List</span>
+            <span fxFlex></span>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row" fxFlexFill>
+            <!-- <mat-form-field fxFlex appearance="outline">
+                <mat-label>Search </mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+            </mat-form-field> -->
+        </div>
+        <div class="table-container">
+            <table [dataSource]="dataSource" mat-table matSort>
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+                    <td mat-cell *matCellDef="let element;let i=index">{{i+1}}</td>
+                </ng-container>
+                <ng-container matColumnDef="leaveHis.leaveHisId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+                    <td mat-cell *matCellDef="let element">{{element.leaveHis.leaveHisId}}</td>
+                </ng-container>
+                <ng-container matColumnDef="leaveHis.leave">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Leave</th>
+                    <td mat-cell *matCellDef="let element">{{element.leaveHis.leave.description}}</td>
+                </ng-container>
+                <ng-container matColumnDef="emp">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee</th>
+                    <td mat-cell *matCellDef="let element">{{element.leaveHis.employee.description}}</td>
+                </ng-container>
+                <ng-container matColumnDef="startDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+                    <td mat-cell *matCellDef="let element">{{element.leaveHis.startDate|date:'dd/MM/yyyy'}}</td>
+                </ng-container>
+                <ng-container matColumnDef="endDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                    <td mat-cell *matCellDef="let element">{{element.leaveHis.endDate|date:'dd/MM/yyyy'}}</td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div [ngSwitch]="element.approvedStatus">
+                            <span *ngSwitchCase=true>
+                                <span class="badge rounded-pill bg-success">Approved</span>
+                            </span>
+                            <span *ngSwitchCase=false>
+                                <span class="badge rounded-pill bg-danger">Decline</span>
+                            </span>
+                            <span *ngSwitchDefault>
+                                <button mat-button (click)="saveLeaveApproved(element)" color="primary">Approve</button>
+                                <button mat-button color="accent">Decline</button>
+                            </span>
+                        </div>
+
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                <tr mat-row *matRowDef="let row;columns:displayedColumns"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+
+    </mat-card-footer>
+</mat-card>

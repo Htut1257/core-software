@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-title>Core Attendance</mat-card-title>
+<mat-card-content>
+  <div fxLayout="row">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <p>
+        <mat-form-field appearance="outline">
+          <input type="text" matInput placeholder="Username" formControlName="username">
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <input type="password" matInput placeholder="Password" formControlName="password">
+        </mat-form-field>
+      </p>
+      <p *ngIf="error" class="error">
+        {{ error }}
+      </p>
+      <div class="button">
+        <button mat-flat-button color="primary" type="submit" mat-button>Login</button>
+      </div>
+    </form>
+  </div>
+</mat-card-content>
+</mat-card>
