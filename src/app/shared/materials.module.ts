@@ -19,11 +19,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-// import {
-//   NgxMatDatetimePickerModule,
-//   NgxMatNativeDateModule,
-//   NgxMatTimepickerModule
-// } from '@angular-material-components/datetime-picker';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule
+} from '@angular-material-components/datetime-picker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToasterComponent } from './toasts/toaster/toaster.component';
@@ -51,9 +51,9 @@ const materialsModule = [
   MatButtonModule,
   MatIconModule,
   MatDatepickerModule,
-  // NgxMatDatetimePickerModule,
-  // NgxMatTimepickerModule,
-  // NgxMatNativeDateModule,
+  NgxMatDatetimePickerModule,
+  NgxMatTimepickerModule,
+  NgxMatNativeDateModule,
   MatNativeDateModule,
 
   FlexLayoutModule,

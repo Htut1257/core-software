@@ -54,7 +54,7 @@ export class DayPipe implements PipeTransform {
     let dayString = ''
     for (var i = 0; i < DayColumn.length; i++) {
       let dayName = DayColumn[i].key.toString()
-  
+
       switch (dayName) {
         case 'mon': {
           if (shift.mon) {

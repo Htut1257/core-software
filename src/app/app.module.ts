@@ -1,5 +1,5 @@
 // import { HolidayModule } from './features/holiday/holiday.module';
-
+import { DayPipe } from './shared/pipe/day.pipe';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -114,6 +114,7 @@ import { BonusHistoryModule } from './features/bonusHistory/bonus-history.module
     // DashboardComponent,
     // LoginComponent,
     // LeaveApproveComponent,
+    DayPipe,
 
   ],
   imports: [

@@ -120,6 +120,7 @@ export class RosterSetupComponent implements OnInit {
 
     const Roster = {
       rosterId: '',
+      shift:this.roster.shift,
       startDate: startDateValue,
       endDate: endDateValue,
       remark: this.roster.remark,
@@ -127,8 +128,7 @@ export class RosterSetupComponent implements OnInit {
       macId: 6,
       listRosterDetails:employeeRosterData
     }
-    console.log(Roster)
-    
+    console.log(JSON.stringify(Roster))
     this.rosterService.saveRoster(Roster).subscribe(roster=>{
       console.log("Roster Success")
       console.log(roster)
