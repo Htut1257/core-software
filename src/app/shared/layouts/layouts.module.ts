@@ -9,28 +9,32 @@ import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
 import { MainFooterComponent } from './main-footer/main-footer.component';
 import { MainDefaultLayoutComponent } from './main-default-layout/main-default-layout.component';
 
-// import { ToastComponent } from '../toasts/toast/toast.component';
-// import { ToasterComponent } from '../toasts/toaster/toaster.component';
+import { ToastComponent } from '../toasts/toast/toast.component';
+import { ToasterComponent } from '../toasts/toaster/toaster.component';
+
+import { DialogComponent } from '../dialog/dialog.component';
 @NgModule({
   declarations: [
     MainHeaderComponent,
     MainSidebarComponent,
     MainFooterComponent,
     MainDefaultLayoutComponent,
-    // ToastComponent,
-    // ToasterComponent
+    ToastComponent,
+    ToasterComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     MaterialsModule
   ],
-  exports:[
-    MainHeaderComponent, 
+  exports: [
+    MainHeaderComponent,
     MainSidebarComponent,
     MainFooterComponent,
-    // ToastComponent,
-    // ToasterComponent 
+    ToastComponent,
+    ToasterComponent,
+    DialogComponent,
   ]
 })
 export class LayoutsModule { }

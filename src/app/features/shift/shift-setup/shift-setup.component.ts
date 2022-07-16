@@ -29,14 +29,9 @@ export class ShiftSetupComponent implements OnInit {
   }
   shiftId: string = ''
 
-
-
   constructor(private shiftService: ShiftService, private route: Router,private toastService:ToastsService,private fb:FormBuilder) { 
 
   }
-
-
-
 
   public shiftForm = new FormGroup({
     shiftId: new FormControl(),// country:[{data? data.country:'',disabled:true},Validators.required] 
@@ -106,21 +101,21 @@ export class ShiftSetupComponent implements OnInit {
   setFormInitialData(shift: Shift) {
     let startDateObj = shift.startTime?new Date(shift.startTime):new Date();
     let endDateObj = shift.endTime?new Date(shift.endTime):new Date();
-    // this.shiftForm.setValue({
-    //   shiftId: shift.shiftId,
-    //   description: shift.description,
-    //   mon: shift.mon,
-    //   tue: shift.thu,
-    //   wed: shift.wed,
-    //   thu: shift.thu,
-    //   fri: shift.fri,
-    //   sat: shift.sat,
-    //   sun: shift.sun,
-    //   // startTime: null,
-    //   // endTime: null,
-    //   startTime: startDateObj,
-    //   endTime: endDateObj
-    // })
+    this.shiftForm.setValue({
+      shiftId: shift.shiftId,
+      description: shift.description,
+      mon: shift.mon,
+      tue: shift.thu,
+      wed: shift.wed,
+      thu: shift.thu,
+      fri: shift.fri,
+      sat: shift.sat,
+      sun: shift.sun,
+      // startTime: null,
+      // endTime: null,
+      startTime: startDateObj,
+      endTime: endDateObj
+    })
   }
 
   //clear data

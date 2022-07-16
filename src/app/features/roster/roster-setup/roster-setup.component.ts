@@ -96,6 +96,7 @@ export class RosterSetupComponent implements OnInit {
   getRosterDetail(id: string) {
     this.rosterService.getRosterDetail(id).subscribe(rosterDetails => {
       this.rosterDetail = rosterDetails
+      console.log(rosterDetails)
     })
   }
 

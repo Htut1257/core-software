@@ -1,11 +1,15 @@
+import { AttendanceComponent } from './features/attendance/attendance/attendance.component';
+import { ShiftSwappingSetupComponent } from './features/shift-swapping/shift-swapping-setup/shift-swapping-setup.component';
+import { ShiftSwappingComponent } from './features/shift-swapping/shift-swapping/shift-swapping.component';
+import { LeaveOpeningComponent } from './features/leave-opening/leave-opening/leave-opening.component';
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
- import { LoginComponent } from './features/login/login.component';
+import { LoginComponent } from './features/login/login.component';
 // import { DashboardComponent } from './features/dashboard/dashboard.component';
- import { MainDefaultLayoutComponent } from './shared/layouts/main-default-layout/main-default-layout.component';
+import { MainDefaultLayoutComponent } from './shared/layouts/main-default-layout/main-default-layout.component';
 
 import { BonusComponent } from './features/bonus/bonus/bonus.component';
 import { BonusSetupComponent } from './features/bonus/bonus-setup/bonus-setup.component';
@@ -20,7 +24,7 @@ import { DeductionHistorySetupComponent } from './features/deductionHistory/dedu
 import { DepartmentComponent } from './features/department/department/department.component';
 import { DepartmentSetupComponent } from './features/department/department-setup/department-setup.component';
 import { DeptHisComponent } from './features/departmentHistory/dept-his/dept-his.component';
-import { DeptHisSetupComponent } from './features/departmentHistory/dept-his-setup/dept-his-setup.component'; 
+import { DeptHisSetupComponent } from './features/departmentHistory/dept-his-setup/dept-his-setup.component';
 import { EmployeeComponent } from './features/employee/employee/employee.component';
 import { EmployeeSetupComponent } from './features/employee/employee-setup/employee-setup.component';
 import { HolidayComponent } from './features/holiday/holiday/holiday.component';
@@ -46,52 +50,61 @@ import { RosterComponent } from './features/roster/roster/roster.component';
 import { RosterSetupComponent } from './features/roster/roster-setup/roster-setup.component';
 import { ShiftComponent } from './features/shift/shift/shift.component';
 import { ShiftSetupComponent } from './features/shift/shift-setup/shift-setup.component';
+import { LeaveOpeningSetupComponent } from './features/leave-opening/leave-opening-setup/leave-opening-setup.component';
+import { AttendanceSetupComponent } from './features/attendance/attendance-setup/attendance-setup.component';
 const routes: Routes = [
-  {path:'main',component:MainDefaultLayoutComponent,
-  children:[
-    // {path:'',component:DashboardComponent},
-    {path:'bonus',component:BonusComponent},
-    {path:'bonus-setup',component:BonusSetupComponent},
-    {path:'bonus-assign',component:BonusHisComponent},
-    {path:'bonus-assign-setup',component:BonusHisSetupComponent},
-    {path:'city',component:CityComponent},
-    {path:'city-setup',component:CitySetupComponent},
-    {path:'deduction',component:DeductionComponent},
-    {path:'deduction-setup',component:DeductionSetupComponent},
-    {path:'deduction-assign',component:DeductionHistoryComponent},
-    {path:'deduction-assign-setup',component:DeductionHistorySetupComponent},
-    {path:'department',component:DepartmentComponent},
-    {path:'department-setup',component:DepartmentSetupComponent},
-    {path:'department-assign',component:DeptHisComponent},
-    {path:'department-assign-setup',component:DeptHisSetupComponent},
-    {path:'employee',component:EmployeeComponent},
-    {path:'employee-setup',component:EmployeeSetupComponent},
-    {path:'holiday',component:HolidayComponent},
-    {path:'holiday-setup',component:HolidaySetupComponent},
-    {path:'increment',component:IncrementComponent},
-    {path:'increment-setup',component:IncrementSetupComponent},
-    {path:'job',component:JobComponent},
-    {path:'job-setup',component:JobSetupComponent},
-    {path:'job-assign',component:JobHistoryComponent},
-    {path:'job-assign-setup',component:JobHistorySetupComponent},
-    {path:'late',component:LateComponent},
-    {path:'late-setup',component:LateSetupComponent},
-    {path:'leave',component:LeaveComponent},
-    {path:'leave-approve',component:LeaveApproveComponent},
-    {path:'leave-setup',component:LeaveSetupComponent},
-    {path:'leave-assign',component:LeaveHistoryComponent},
-    {path:'leave-assign-setup',component:LeaveHistorySetupComponent},
-    {path:'ot',component:OtComponent},
-    {path:'ot-setup',component:OtSetupComponent},
-    {path:'payday',component:PaydayComponent},
-    {path:'payday-setup',component:PaydaySetupComponent},
-    {path:'roster',component:RosterComponent},
-    {path:'roster-setup',component:RosterSetupComponent},
-    {path:'shift',component:ShiftComponent},
-    {path:'shift-setup',component:ShiftSetupComponent},
-  ]},
-  {path:'login',component:LoginComponent},
-  {path:'',redirectTo:'login',pathMatch:'full'},
+  {
+    path: 'main', component: MainDefaultLayoutComponent,
+    children: [
+      { path: 'attendance', component: AttendanceComponent },
+      { path: 'attendance-setup', component: AttendanceSetupComponent },
+      { path: 'bonus', component: BonusComponent },
+      { path: 'bonus-setup', component: BonusSetupComponent },
+      { path: 'bonus-assign', component: BonusHisComponent },
+      { path: 'bonus-assign-setup', component: BonusHisSetupComponent },
+      { path: 'city', component: CityComponent },
+      { path: 'city-setup', component: CitySetupComponent },
+      { path: 'deduction', component: DeductionComponent },
+      { path: 'deduction-setup', component: DeductionSetupComponent },
+      { path: 'deduction-assign', component: DeductionHistoryComponent },
+      { path: 'deduction-assign-setup', component: DeductionHistorySetupComponent },
+      { path: 'department', component: DepartmentComponent },
+      { path: 'department-setup', component: DepartmentSetupComponent },
+      { path: 'department-assign', component: DeptHisComponent },
+      { path: 'department-assign-setup', component: DeptHisSetupComponent },
+      { path: 'employee', component: EmployeeComponent },
+      { path: 'employee-setup', component: EmployeeSetupComponent },
+      { path: 'holiday', component: HolidayComponent },
+      { path: 'holiday-setup', component: HolidaySetupComponent },
+      { path: 'increment', component: IncrementComponent },
+      { path: 'increment-setup', component: IncrementSetupComponent },
+      { path: 'job', component: JobComponent },
+      { path: 'job-setup', component: JobSetupComponent },
+      { path: 'job-assign', component: JobHistoryComponent },
+      { path: 'job-assign-setup', component: JobHistorySetupComponent },
+      { path: 'late', component: LateComponent },
+      { path: 'late-setup', component: LateSetupComponent },
+      { path: 'leave', component: LeaveComponent },
+      { path: 'leave-approve', component: LeaveApproveComponent },
+      { path: 'leave-setup', component: LeaveSetupComponent },
+      { path: 'leave-assign', component: LeaveHistoryComponent },
+      { path: 'leave-assign-setup', component: LeaveHistorySetupComponent },
+      { path: 'leave-opening', component: LeaveOpeningComponent },
+      { path: 'leave-opening-setup', component: LeaveOpeningSetupComponent },
+      { path: 'ot', component: OtComponent },
+      { path: 'ot-setup', component: OtSetupComponent },
+      { path: 'payday', component: PaydayComponent },
+      { path: 'payday-setup', component: PaydaySetupComponent },
+      { path: 'roster', component: RosterComponent },
+      { path: 'roster-setup', component: RosterSetupComponent },
+      { path: 'shift', component: ShiftComponent },
+      { path: 'shift-setup', component: ShiftSetupComponent },
+      { path: 'shift-swapping', component: ShiftSwappingComponent },
+      { path: 'shift-swapping-setup', component: ShiftSwappingSetupComponent },
+    ]
+  },
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({

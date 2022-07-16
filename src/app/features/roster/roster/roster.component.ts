@@ -41,6 +41,11 @@ export class RosterComponent implements OnInit {
     this.rosterService._roster = roster;
   }
 
+  //delete roster
+  removeRoster(roster:Roster){
+
+  }
+
   //apply filter to table
   applyFilter(event: any) {
     let filterValue = (event.target as HTMLInputElement).value;

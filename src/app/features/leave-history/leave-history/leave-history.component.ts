@@ -41,6 +41,8 @@ export class LeaveHistoryComponent implements OnInit {
     this.leaveHisService._leaveHis = leaveHis;
   }
 
+  
+
   //apply filter to table
   applyFilter(event: any) {
     let filterValue = (event.target as HTMLInputElement).value;

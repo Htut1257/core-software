@@ -1,1 +1,141 @@
-<p>employee-setup works!</p>
+<mat-card> 
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutGap="10px" class="container">
+        <span>Employee Setup</span>
+      
+        <span fxFlex></span>
+        <button  mat-stroked-button [routerLink]="['/main/bonus']" (click)="onBacktoList()">Back</button>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-divider></mat-divider><br>
+      <form class="form" role="form" (ngSubmit)="onSaveEmployee()">
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Employee ID</mat-label>
+            <input matInput [(ngModel)]="employee.employeeId" name="employeeId" 
+            disabled="{{ (employeeId=='') ? false:true }}"  
+            >
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline" >
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="employee.description" name="description">
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline">
+            <mat-label>Phone No</mat-label>
+            <input matInput [(ngModel)]="employee.phoneNo" name="phoneNo" 
+            disabled="{{ (employeeId=='') ? false:true }}"  
+            >
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field fxFlex  appearance="outline" >
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="employee.email" name="email">
+          </mat-form-field>
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+        fxLayout="row" 
+        fxFlexFill fxLayout.lt-sm="column" 
+        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+      >
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+          <mat-label>Address</mat-label>
+          <input matInput [(ngModel)]="employee.address" name="phonaddresseNo" 
+          disabled="{{ (employeeId=='') ? false:true }}"  
+          >
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline" >
+          <mat-label>Remark</mat-label>
+          <input matInput [(ngModel)]="employee.remark" name="remark">
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+        fxLayout="row" 
+        fxFlexFill fxLayout.lt-sm="column" 
+        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+      >
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select [(ngModel)]="employee.gender" name="region" [compareWith]="compareJob" >
+            <mat-option *ngFor="let item of gender" [value]="item">
+              {{item.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex  appearance="outline" >
+          <mat-label>City</mat-label>
+          <mat-select [(ngModel)]="employee.city" name="region" [compareWith]="compareCity" >
+            <mat-option *ngFor="let item of cities" [value]="item">
+              {{item.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        </div>
+        <div 
+          fxLayout="row" 
+          fxFlexFill fxLayout.lt-sm="column" 
+          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <mat-form-field class="mat-form-field-photo" fxFlex  appearance="outline">
+            <div>
+                <mat-toolbar>
+                  <!-- Display files names -->
+                  <input matInput [(ngModel)]="fileAttr" readonly name="name" />
+                  <!-- Browse Button -->
+                  <button mat-flat-button color="primary">Browse File</button>
+                </mat-toolbar>
+                <!-- Fetch selected filed on change -->
+                <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvent($event)" name="uploadFile" multiple="multiple" accept="image/*" />
+            </div>
+          </mat-form-field>
+          <span fxFlex.gt-lg="55%" fxFlex.lg="55%" fxFlex.md="52%" fxFlex.sm="50%"></span>
+        </div>
+        <div 
+          fxLayout="row" 
+          fxFlexFill 
+          fxLayout.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
+        >
+          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+          <section fxFlex class="example-section">
+              <mat-checkbox class="example-margin" checked="{{employee.active}}" [(ngModel)]="employee.active" name="active"color="primary">Active</mat-checkbox>
+          </section>
+          <span fxFlex></span>
+          <span class="title-name">{{ (employeeId=='') ? ' New ':' Edit ' }}</span>
+        </div>
+        <br><mat-divider></mat-divider><br>
+        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
+          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit"  >
+            {{ (employeeId=='') ? 'Add':'Save' }}
+          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
+        </div>
+        </form> 
+    </mat-card-content>
+    <mat-card-footer>
+      
+    </mat-card-footer>
+  </mat-card>
+  

@@ -5,6 +5,8 @@ import { BonusService } from 'src/app/core/services/bonus/bonus.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-bonus',
   templateUrl: './bonus.component.html',
@@ -15,7 +17,10 @@ export class BonusComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort
   displayedColumns: String[] = ["position", "code", "description", "active", "action"]//"amount",
   dataSource!: MatTableDataSource<Bonus>
-  constructor(private bonusService: BonusService, private route: Router, private toastService: ToastsService) { }
+  constructor(
+    private bonusService: BonusService, private route: Router, private toastService: ToastsService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getBonus();
@@ -39,16 +44,24 @@ export class BonusComponent implements OnInit {
 
   //delete Bonus data
   removeBonus(bonus: Bonus) {
-    this.bonusService.removeBonus(bonus.bonusId).subscribe(data => {
-      let result = data
-      if (result.message == "Used") {
-        this.toastService.showWarningToast('title', 'the selected ' + bonus.description + ' is Used')
-        return
-      }
-      this.bonusService._bonuses = this.bonusService._bonuses.filter(bonuses => bonuses.bonusId !== bonus.bonusId)
-      this.getBonus();
-      this.toastService.showSuccessToast('title', 'Success deleting ' + bonus.description + '')
-    })
+    this.dialog.open(DialogComponent)
+      .afterClosed()
+      .subscribe(confirm => {
+        if (confirm) {
+          this.bonusService.removeBonus(bonus.bonusId).subscribe(data => {
+            let result = data
+            if (result.message == "Used") {
+              this.toastService.showWarningToast('title', 'the selected ' + bonus.description + ' is Used')
+              return
+            }
+            this.bonusService._bonuses = this.bonusService._bonuses.filter(bonuses => bonuses.bonusId !== bonus.bonusId)
+            this.getBonus();
+            this.toastService.showSuccessToast('title', 'Success deleting ' + bonus.description + '')
+          })
+        }
+      })
+
+
   }
 
   //apply filter to table

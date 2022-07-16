@@ -53,6 +53,12 @@ import { ShiftSetupComponent } from './features/shift/shift-setup/shift-setup.co
 
 import { BonusModule } from './features/bonus/bonus.module';
 import { BonusHistoryModule } from './features/bonusHistory/bonus-history.module';
+import { LeaveOpeningComponent } from './features/leave-opening/leave-opening/leave-opening.component';
+import { LeaveOpeningSetupComponent } from './features/leave-opening/leave-opening-setup/leave-opening-setup.component';
+import { ShiftSwappingComponent } from './features/shift-swapping/shift-swapping/shift-swapping.component';
+import { ShiftSwappingSetupComponent } from './features/shift-swapping/shift-swapping-setup/shift-swapping-setup.component';
+import { AttendanceSetupComponent } from './features/attendance/attendance-setup/attendance-setup.component';
+import { AttendanceComponent } from './features/attendance/attendance/attendance.component';
 
 // import { CityModule } from './features/city/city.module';
 // import { DeductionModule } from './features/deduction/deduction.module';
@@ -115,6 +121,12 @@ import { BonusHistoryModule } from './features/bonusHistory/bonus-history.module
     // LoginComponent,
     // LeaveApproveComponent,
     DayPipe,
+    LeaveOpeningComponent,
+    LeaveOpeningSetupComponent,
+    ShiftSwappingComponent,
+    ShiftSwappingSetupComponent,
+    AttendanceSetupComponent,
+    AttendanceComponent,
 
   ],
   imports: [

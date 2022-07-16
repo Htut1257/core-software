@@ -4,6 +4,8 @@ import { Bonus } from 'src/app/core/models/bonus.model';
 import { BonusService } from 'src/app/core/services/bonus/bonus.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
 
   selector: 'app-bonus-setup',
@@ -26,7 +28,7 @@ export class BonusSetupComponent implements OnInit {
     description: new FormControl('', Validators.required),
   })
 
-  constructor(private bonusService: BonusService, private route: Router, private toastService: ToastsService) { }
+  constructor(private bonusService: BonusService, private route: Router, private toastService: ToastsService,public dialog:MatDialog) { }
 
   ngOnInit(): void {
     if (this.bonusService._bonus != undefined) {
@@ -72,6 +74,7 @@ export class BonusSetupComponent implements OnInit {
 
   //clear bonus object
   clearBonus(bonus: Bonus, bonusId: string) {
+    this.openDialog("success")
     bonus = {
       bonusId: bonusId,
       description: '',
@@ -81,4 +84,18 @@ export class BonusSetupComponent implements OnInit {
     }
     this.bonus = bonus
   }
+
+  openDialog(message:string){
+    this.dialog.open(DialogComponent,{
+
+    })
+    .afterClosed()
+    .subscribe(confirm=>{
+      console.log(confirm)
+      if(confirm){
+       
+      }
+    })
+  }
+
 }

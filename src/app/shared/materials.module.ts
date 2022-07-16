@@ -26,10 +26,7 @@ import {
 } from '@angular-material-components/datetime-picker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ToasterComponent } from './toasts/toaster/toaster.component';
-import { ToastComponent } from './toasts/toast/toast.component';
-
-
+import {MatDialogModule} from '@angular/material/dialog';
 const materialsModule = [
   MatSidenavModule,
   MatDividerModule,
@@ -57,15 +54,12 @@ const materialsModule = [
   MatNativeDateModule,
 
   FlexLayoutModule,
-
+  MatDialogModule,
 
 ]
 
 @NgModule({
   declarations: [
-
-    ToasterComponent,
-    ToastComponent
   ],
   imports: [
     materialsModule
