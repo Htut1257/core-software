@@ -9,11 +9,21 @@
         </div>
     </mat-card-title>
     <mat-card-content>
-        <div fxLayout="row" fxFlexFill>
-            <mat-form-field fxFlex appearance="outline">
+        <div fxLayout="row" fxLayout.lt-sm="column" fxFlexFill>
+            <mat-form-field  appearance="outline">
                 <mat-label>Search </mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
             </mat-form-field>
+            <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%" fxFlex.sm="5%"></span>
+            <mat-form-field  appearance="outline">
+                <mat-label>Status </mat-label>
+                <mat-select matNativeControl required (selectionChange)="changeEvent($event)">
+                    <mat-option >All</mat-option>
+                    <mat-option value="true">Approved</mat-option>
+                    <mat-option value="false">Decline</mat-option>
+                  </mat-select>
+            </mat-form-field>
+            <span fxFlex></span>
         </div>
         <div class="table-container">
             <table [dataSource]="dataSource" mat-table matSort>

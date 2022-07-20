@@ -65,7 +65,7 @@ export class AttendanceSetupComponent implements OnInit {
     Attendance.startTime=startDateValue
     Attendance.endTime=endDateValue
     Attendance.macId = 6
-    console.log(Attendance)
+    console.log(JSON.stringify(Attendance))
     this.attenService.saveAttendance(Attendance).subscribe(atten=>{
       console.log('Success')
       console.log(atten)

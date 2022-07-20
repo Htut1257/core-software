@@ -47,4 +47,8 @@ export class LeaveOpeningComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  changeEvent(event:any){
+    console.log('changed'+event.value)
+  }
+
 }

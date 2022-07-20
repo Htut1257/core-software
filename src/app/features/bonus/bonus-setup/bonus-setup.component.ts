@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Bonus } from 'src/app/core/models/bonus.model';
 import { BonusService } from 'src/app/core/services/bonus/bonus.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { Validators, FormControl, FormGroup, FormBuilder, NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
@@ -14,38 +14,47 @@ import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 })
 export class BonusSetupComponent implements OnInit {
 
-  bonus: Bonus = {
-    bonusId: '',
-    description: '',
-    amount: 0,
-    active: true,
-    macId: 0
-  }
+  bonus!: Bonus
   bonusId: string = ''
+  @ViewChild('noteForm', { static: true }) noteForm: NgForm;
 
   //for Form Validation
   bonusForm = new FormGroup({
+    bonusId: new FormControl({ value: '', disabled: true }),
     description: new FormControl('', Validators.required),
+    active: new FormControl(true)
   })
 
-  constructor(private bonusService: BonusService, private route: Router, private toastService: ToastsService,public dialog:MatDialog) { }
+  constructor(
+    private bonusService: BonusService, private route: Router,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) {
+    this.bonus = {} as Bonus
+  }
 
   ngOnInit(): void {
     if (this.bonusService._bonus != undefined) {
+
+      console.log(this.bonusService._bonus)
       this.bonus = this.bonusService._bonus
       this.bonusId = this.bonusService._bonus.bonusId
+      this.initialBonusFormData(this.bonus)
     }
   }
 
+  //Fill Form data on Edit
+  initialBonusFormData(bonus: Bonus) {
+    this.bonusForm.setValue({
+      bonusId: bonus.bonusId,
+      description: bonus.description,
+      active: bonus.active
+    })
+  }
+
   //save or edit Bonus
-  onSaveBonus() {
-    const Bonus = {
-      bonusId: this.bonus.bonusId,
-      description: this.bonus.description,
-      amount: this.bonus.amount,
-      active: this.bonus.active,
-      macId: 6
-    }
+  onSaveBonus(data: any) {
+    let Bonus = data
+    Bonus.macId = 6
     this.bonusService.saveBonus(Bonus).subscribe(bonus => {
       if (this.bonusId == '') {
         this.bonusService._bonuses.push(bonus)
@@ -55,7 +64,7 @@ export class BonusSetupComponent implements OnInit {
       }
       this.bonusId = ''
       this.onClear()
-      this.bonusService._bonus = this.bonus
+      this.bonusService._bonus = undefined
     })
   }
 
@@ -63,39 +72,22 @@ export class BonusSetupComponent implements OnInit {
   onBacktoList() {
     this.bonusId = ''
     this.onClear()
-    this.bonusService._bonus = this.bonus
+    this.bonusService._bonus = undefined
     this.route.navigate(['/main/bonus'])
   }
 
   //clear data
   onClear() {
-    this.clearBonus(this.bonus, this.bonusId);
+    this.bonus = {} as Bonus
+    this.clearBonus(this.bonusId);
+   
   }
 
   //clear bonus object
-  clearBonus(bonus: Bonus, bonusId: string) {
-    this.openDialog("success")
-    bonus = {
-      bonusId: bonusId,
-      description: '',
-      amount: 0,
-      active: true,
-      macId: 0
-    }
-    this.bonus = bonus
+  clearBonus(id: string) {
+    this.bonusForm.reset()
+    this.noteForm.resetForm();
+    this.bonusForm.controls['bonusId'].setValue(id)
+    this.bonusForm.controls['active'].setValue(true)
   }
-
-  openDialog(message:string){
-    this.dialog.open(DialogComponent,{
-
-    })
-    .afterClosed()
-    .subscribe(confirm=>{
-      console.log(confirm)
-      if(confirm){
-       
-      }
-    })
-  }
-
 }

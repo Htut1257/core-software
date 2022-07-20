@@ -12,7 +12,7 @@ export class ApiSetting{
     }
 
     public static get payRollApi(){
-        return 'http://192.168.100.43:8098'
+        return 'http://192.168.100.50:8098'
         //return 'http://svr:8098'
     }
 

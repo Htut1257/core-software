@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { observable, Observable } from 'rxjs';
 import { HttpClient,HttpHeaders,HttpParams } from '@angular/common/http';
 import { Attendance } from '../../models/attendance.model';
 import { ApiSetting } from 'src/app/api/app-api-setting';
@@ -16,6 +16,23 @@ export class AttendanceService {
   _atten:Attendance
   _attens:Attendance[]=[]
   constructor(private http:HttpClient) { }
+
+  //get all attendance
+  getAttendance():Observable<Attendance[]>{
+    return new Observable(observable=>{
+      if(this._attens.length>1){
+        observable.next(this._attens)
+        return  observable.complete()
+      }
+      let uri=`${ApiSetting.payRollApi}/approved/get-Attendance`
+      let httpOption={headers:httpHeaders}
+      this.http.get<Attendance[]>(uri,httpOption).subscribe(attens=>{
+        this._attens=attens
+        observable.next(attens)
+        observable.complete()
+      })
+    })
+  }
 
   //add or edit Attendance
   saveAttendance(atten:Attendance):Observable<Attendance>{

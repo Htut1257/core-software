@@ -15,7 +15,7 @@ import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 export class BonusComponent implements OnInit {
   bonuses!: Bonus[]
   @ViewChild(MatSort) sort!: MatSort
-  displayedColumns: String[] = ["position", "code", "description", "active", "action"]//"amount",
+  displayedColumns: String[] = ["position", "code", "description", "active", "action"]
   dataSource!: MatTableDataSource<Bonus>
   constructor(
     private bonusService: BonusService, private route: Router, private toastService: ToastsService,
@@ -39,7 +39,6 @@ export class BonusComponent implements OnInit {
   getDepartmentDataRow(bonus: Bonus) {
     this.route.navigate(['/main/bonus-setup']);
     this.bonusService._bonus = bonus;
-
   }
 
   //delete Bonus data
@@ -60,8 +59,6 @@ export class BonusComponent implements OnInit {
           })
         }
       })
-
-
   }
 
   //apply filter to table

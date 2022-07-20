@@ -23,6 +23,7 @@ export class ShiftSwappingComponent implements OnInit {
   getShiftSwapping(){
     this.shiftSwapService.getShiftSwapping().subscribe(shiftsSwap=>{
       this.shiftsSwap=shiftsSwap
+      console.log(shiftsSwap)
       this.dataSource=new MatTableDataSource(shiftsSwap)
 
     })

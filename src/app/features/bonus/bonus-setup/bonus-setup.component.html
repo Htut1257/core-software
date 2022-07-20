@@ -8,30 +8,30 @@
     </mat-card-title>
     <mat-card-content>
       <mat-divider></mat-divider><br>
-      <form class="form" role="form" (ngSubmit)="onSaveBonus()" [formGroup]="bonusForm">
+      <form class="form" #noteForm="ngForm"   role="form" (ngSubmit)="onSaveBonus(bonusForm.value)" [formGroup]="bonusForm">
         <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
           fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%" fxLay>
           <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
           <mat-form-field fxFlex appearance="outline">
             <mat-label>Bonus ID</mat-label>
-            <input matInput [(ngModel)]="bonus.bonusId" name="bonusId" [ngModelOptions]="{standalone: true}"
-              disabled="{{ (bonusId=='') ? false:true }}">
+            <input matInput formControlName="bonusId" name="bonusId">
           </mat-form-field>
           <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
           <mat-form-field fxFlex appearance="outline">
             <mat-label>Description</mat-label>
-            <input matInput [(ngModel)]="bonus.description" name="description" formControlName="description" required>
-            <mat-error *ngIf="!bonusForm.value.description">Please Enter Description</mat-error>
+            <input matInput name="description" formControlName="description" required>
+        
+              <mat-error *ngIf="!bonusForm.value.description">Please Enter Description</mat-error>
+           
+            
           </mat-form-field>
           <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
         </div>
-  
         <div fxLayout="row" fxFlexFill fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px"
           fxLayoutGap.xs="0%">
           <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
           <section fxFlex class="example-section">
-            <mat-checkbox class="example-margin" checked="{{bonus.active}}" [ngModelOptions]="{standalone: true}"
-              [(ngModel)]="bonus.active" name="active" color="primary">Active</mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="active" name="active" color="primary">Active</mat-checkbox>
           </section>
           <span fxFlex></span>
           <span class="title-name">{{ (bonusId=='') ? ' New ':' Edit ' }}</span>

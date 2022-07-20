@@ -21,19 +21,19 @@
                 </ng-container>
                 <ng-container matColumnDef="fromEmployee">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>From Employee</th>
-                    <td mat-cell *matCellDef="let element">{{element.fromEmployee}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.fromEmployeeId.description}}</td>
                 </ng-container>
                 <ng-container matColumnDef="toEmployee">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>To Employee</th>
-                    <td mat-cell *matCellDef="let element">{{element.toEmployee}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.toEmployeeId.description}}</td>
                 </ng-container>
                 <ng-container matColumnDef="fromDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
-                    <td mat-cell *matCellDef="let element">{{element.startDate|date:'dd/MM/yyyy'}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.fromDate|date:'dd/MM/yyyy'}}</td>
                 </ng-container>
                 <ng-container matColumnDef="toDate">
                     <th mat-header-cell *matHeaderCellDef>TO Date</th>
-                    <td mat-cell *matCellDef="let element">{{element.endDate|date:'dd/MM/yyyy'}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.toDate|date:'dd/MM/yyyy'}}</td>
                 </ng-container>
                 <ng-container matColumnDef="remark">
                     <th mat-header-cell *matHeaderCellDef>Remark</th>
