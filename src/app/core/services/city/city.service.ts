@@ -47,9 +47,9 @@ export class CityService {
   //delete city
   removeCity(id: string): Observable<any> {
     let uri = `${ApiSetting.payRollApi}/setup/delete-City`
-    let httpParams=new HttpParams().set('id',id)
-    let httpOption={headers:httpHeader,params:httpParams}
-    return this.http.delete<any>(uri,httpOption)
+    let httpParams = new HttpParams().set('id', id)
+    let httpOption = { headers: httpHeader, params: httpParams }
+    return this.http.delete<any>(uri, httpOption)
   }
 
 }

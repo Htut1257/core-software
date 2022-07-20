@@ -1,79 +1,70 @@
-<mat-card> 
-    <mat-card-title>
-      <div fxLayout="row" fxLayoutGap="10px" class="container">
-        <span>Job Setup</span>
-        <span fxFlex></span>
-        <button  mat-stroked-button [routerLink]="['/main/job']" (click)="onBacktoList()">Back</button>
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutGap="10px" class="container">
+      <span>Job Setup</span>
+      <span fxFlex></span>
+      <button mat-stroked-button [routerLink]="['/main/job']" (click)="onBacktoList()">Back</button>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-divider></mat-divider><br>
+    <form #reactiveForm="ngForm" class="form" role="form" (ngSubmit)="onSaveJob(jobForm.value)" [formGroup]="jobForm">
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Job ID</mat-label>
+          <input matInput name="jobId" formControlName="jobId">
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" name="description">
+          <mat-error *ngIf="!jobForm.value.description">Please Enter Description</mat-error>
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
       </div>
-    </mat-card-title>
-    <mat-card-content>
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Pay Day</mat-label>
+          <mat-select name="payday" [compareWith]="compareFn" formControlName="payday">
+            <mat-option *ngFor="let item of paydays" [value]="item">
+              {{item.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Salary</mat-label>
+          <input matInput name="salary" formControlName="salary">
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+      </div>
+
+      <div fxLayout="row" fxFlexFill fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px"
+        fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <section fxFlex class="example-section">
+          <mat-checkbox class="example-margin" name="active" formControlName="active" color="primary">Active
+          </mat-checkbox>
+        </section>
+        <span fxFlex></span>
+        <span class="title-name">{{ (jobId=='') ? ' New ':' Edit ' }}</span>
+      </div>
+      <br>
       <mat-divider></mat-divider><br>
-      <form class="form" role="form" (ngSubmit)="onSaveJob()" [formGroup]="jobForm" >
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Job ID</mat-label>
-            <input matInput [(ngModel)]="job.jobId" name="jobId" [ngModelOptions]="{standalone: true}"
-            disabled="{{ (jobId=='') ? false:true }}"    >
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline" >
-            <mat-label>Description</mat-label>
-            <input matInput [(ngModel)]="job.description" formControlName="description" name="description">
-            <mat-error *ngIf="!jobForm.value.description">Please Enter Description</mat-error>
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Pay Day</mat-label>
-            <mat-select [(ngModel)]="job.payDay" name="payday" [compareWith]="compareFn" formControlName="payday" >
-              <mat-option *ngFor="let item of paydays" [value]="item">
-                {{item.description}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline" >
-            <mat-label>Salary</mat-label>
-            <input matInput [(ngModel)]="job.salary" name="salary" [ngModelOptions]="{standalone: true}" >
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        
-        <div 
-          fxLayout="row" 
-          fxFlexFill 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <section fxFlex class="example-section">
-              <mat-checkbox class="example-margin" checked="{{job.active}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="job.active" name="active"color="primary">Active</mat-checkbox>
-          </section>
-          <span fxFlex></span>
-          <span class="title-name">{{ (jobId=='') ? ' New ':' Edit ' }}</span>
-        </div>
-        <br><mat-divider></mat-divider><br>
-        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
-          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
-          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!jobForm.valid" >
-            {{ (jobId=='') ? 'Add':'Save' }}
-          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
-          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
-        </div>
-        </form> 
-    </mat-card-content>
-    <mat-card-footer>
-      
-    </mat-card-footer>
-  </mat-card>
-  
+      <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+        <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
+        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" >
+          {{ (jobId=='') ? 'Add':'Save' }}
+        </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+        <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>

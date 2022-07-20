@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 import { BonusHistory } from 'src/app/core/models/bonus_his.model';
 import { BonusHistoryService } from 'src/app/core/services/bonus-history/bonus-history.service';
 import { Bonus } from 'src/app/core/models/bonus.model';
@@ -15,28 +15,28 @@ import * as moment from 'moment'
   styleUrls: ['./bonus-his-setup.component.css']
 })
 export class BonusHisSetupComponent implements OnInit {
-  initialBonusHis: BonusHistory = {
-    bonusHisId: '',
-    bonusDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    remark: '',
-    amount: 0,
-    macId: 0,
-  }
-  bonusHis: BonusHistory = this.initialBonusHis
+  bonusHis: BonusHistory
   bonusHisId: string = ''
   employees: Employee[] = []
   bonuses: Bonus[] = []
-
+  todayDate = moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD')
+  @ViewChild('reactiveForm', { static: true }) reactiveForm: NgForm
   constructor(
     private route: Router, private bonusHisService: BonusHistoryService,
     private bonusService: BonusService, private employeeService: EmployeeService,
     private toastService: ToastsService
-  ) { }
+  ) {
+    this.bonusHis = {} as BonusHistory
+  }
 
+  //form validation
   bonusHisForm = new FormGroup({
-    bonus: new FormControl('', Validators.required),
-    employee: new FormControl('', Validators.required),
-    bonusDate: new FormControl('', Validators.required)
+    bonusHisId: new FormControl({ value: '', disabled: true }),
+    bonus: new FormControl(null, Validators.required),
+    employee: new FormControl(null, Validators.required),
+    bonusDate: new FormControl(this.todayDate, Validators.required),
+    amount: new FormControl(0),
+    remark: new FormControl('')
   })
 
   ngOnInit(): void {
@@ -45,7 +45,20 @@ export class BonusHisSetupComponent implements OnInit {
     if (this.bonusHisService._bonusHis != undefined) {
       this.bonusHis = this.bonusHisService._bonusHis
       this.bonusHisId = this.bonusHis.bonusHisId
+      this.initializeFormData(this.bonusHis);
     }
+  }
+
+  //fill form with data on edit
+  initializeFormData(bonusHis: BonusHistory) {
+    this.bonusHisForm.setValue({
+      bonusHisId: bonusHis.bonusHisId,
+      bonus: bonusHis.bonus,
+      employee: bonusHis.employee,
+      bonusDate: bonusHis.bonusDate,
+      amount: bonusHis.amount,
+      remark: bonusHis.remark
+    })
   }
 
   //get bonus list
@@ -63,28 +76,23 @@ export class BonusHisSetupComponent implements OnInit {
   }
 
   //add or edit Bonus History
-  onSaveBonusHistory() {
+  onSaveBonusHistory(data: any) {
     let bonusDateVariable = moment(this.bonusHis.bonusDate);
     let bonusDateValue = bonusDateVariable.format('YYYY-MM-DD');
-    const BonusHistory = {
-      bonusHisId: this.bonusHis.bonusHisId,
-      bonus: this.bonusHis.bonus,
-      employee: this.bonusHis.employee,
-      bonusDate: bonusDateValue,
-      remark: this.bonusHis.remark,
-      amount: this.bonusHis.amount,
-      macId: 6,
-    }
+    let BonusHistory = data
+    BonusHistory.bonusHisId = this.bonusHisId
+    BonusHistory.bonusDate = bonusDateValue
+    BonusHistory.macId = 6
     this.bonusHisService.saveBonusHistory(BonusHistory).subscribe(bonusHis => {
       if (this.bonusHisId == '') {
         this.bonusHisService._bonus_his.push(bonusHis)
-        this.toastService.showSuccessToast('','Success assigning new Bonus ')
-      }else{
-        this.toastService.showSuccessToast('','Success editing Bonus assignment')
+        this.toastService.showSuccessToast('', 'Success assigning new Bonus ')
+      } else {
+        this.toastService.showSuccessToast('', 'Success editing Bonus assignment')
       }
       this.bonusHisId = ''
       this.onClear();
-      this.bonusHisService._bonusHis =this.bonusHis
+      this.bonusHisService._bonusHis = undefined
     })
   }
 
@@ -92,25 +100,23 @@ export class BonusHisSetupComponent implements OnInit {
   onBacktoList() {
     this.bonusHisId = ''
     this.onClear();
-    this.bonusHisService._bonusHis = this.bonusHis
+    this.bonusHisService._bonusHis = undefined
     this.route.navigate(['/main/bonus-assign']);
   }
 
   //Clear Data
   onClear() {
-    this.clearBonusHistory(this.bonusHis,this.bonusHisId)
+    this.bonusHis = {} as BonusHistory
+    this.clearBonusHistory(this.bonusHisId)
   }
 
   //clear bonu histry object
-  clearBonusHistory(bonusHis: BonusHistory, id: string) {
-    bonusHis = {
-      bonusHisId: '',
-      bonusDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-      remark: '',
-      amount: 0,
-      macId: 0,
-    }
-    this.bonusHis = bonusHis
+  clearBonusHistory(id: string) {
+    this.bonusHisForm.reset()
+    this.reactiveForm.resetForm();
+    this.bonusHisForm.controls['bonusHisId'].setValue(id)
+    this.bonusHisForm.controls['bonusDate'].setValue(this.todayDate)
+    this.bonusHisForm.controls['amount'].setValue(0)
   }
 
   //compare bonus data with initial data

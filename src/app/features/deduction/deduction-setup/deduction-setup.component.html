@@ -1,57 +1,51 @@
-<mat-card> 
-    <mat-card-title>
-      <div fxLayout="row" fxLayoutGap="10px" class="container">
-        <span>Deduction Setup</span>
-        <span fxFlex></span>
-        <button  mat-stroked-button [routerLink]="['/main/deduction']" (click)="onBacktoList()">Back</button>
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutGap="10px" class="container">
+      <span>Deduction Setup</span>
+      <span fxFlex></span>
+      <button mat-stroked-button [routerLink]="['/main/deduction']" (click)="onBacktoList()">Back</button>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-divider></mat-divider><br>
+    <form #reactiveForm="ngForm"  class="form" role="form" (ngSubmit)="onSaveDeduction(deductionForm.value)" [formGroup]="deductionForm">
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
+        fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Deduction ID</mat-label>
+          <input matInput name="deductionId" formControlName="deductionId">
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" name="description">
+          <mat-error *ngIf="!deductionForm.value.description">Please Enter Description</mat-error>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
       </div>
-    </mat-card-title>
-    <mat-card-content>
+      <div fxLayout="row" fxFlexFill fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <section fxFlex class="example-section">
+          <mat-checkbox class="example-margin" name="active" color="primary">Active</mat-checkbox>
+        </section>
+        <span fxFlex></span>
+        <span class="title-name">{{ (deductionId=='') ? ' New ':' Edit ' }}</span>
+      </div>
+      <br>
       <mat-divider></mat-divider><br>
-      <form class="form" role="form" (ngSubmit)="onSaveDeduction()" [formGroup]="deductionForm">
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Deduction ID</mat-label>
-            <input matInput [(ngModel)]="deduction.deductionId" name="deductionId" [ngModelOptions]="{standalone: true}"
-              disabled="{{ (deductionId=='')?false:true }}" >
-          </mat-form-field>
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline" >
-            <mat-label>Description</mat-label>
-            <input matInput [(ngModel)]="deduction.description" formControlName="description" name="description"> 
-            <mat-error *ngIf="!deductionForm.value.description">Please Enter Description</mat-error>
-          </mat-form-field>
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-          fxLayout="row" 
-          fxFlexFill
-         fxLayoutGap.gt-lg="10px"  fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <section fxFlex class="example-section">
-              <mat-checkbox class="example-margin" [(ngModel)]="deduction.active" [ngModelOptions]="{standalone: true}" name="active"color="primary">Active</mat-checkbox>
-          </section>
-          <span fxFlex></span>
-          <span class="title-name">{{ (deductionId=='') ? ' New ':' Edit ' }}</span>
-        </div>
-        <br><mat-divider></mat-divider><br>
-        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
-          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
-          <button #saveCustomer fxFlex.lt-sm mat-flat-button   color="primary" type="submit" [disabled]="!deductionForm.valid">
-            {{ (deductionId=='') ? 'Add':'Save' }}
-          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
-          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
-        </div>
-        </form> 
-    </mat-card-content>
-    <mat-card-footer>
-      
-    </mat-card-footer>
-  </mat-card>
-    
+      <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+        <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
+        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit"
+          [disabled]="!deductionForm.valid">
+          {{ (deductionId=='') ? 'Add':'Save' }}
+        </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+        <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>

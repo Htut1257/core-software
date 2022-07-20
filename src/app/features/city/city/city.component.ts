@@ -5,6 +5,8 @@ import { CityService } from 'src/app/core/services/city/city.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-city',
   templateUrl: './city.component.html',
@@ -15,7 +17,10 @@ export class CityComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort!: MatSort
   displayedColumns: string[] = ['position', 'code', 'description', 'active', 'action'];
   dataSource!: MatTableDataSource<City>
-  constructor(private cityService: CityService, private route: Router, private toastService: ToastsService) { }
+  constructor(
+    private cityService: CityService, private route: Router,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getCity();
@@ -44,15 +49,20 @@ export class CityComponent implements OnInit {
 
   //delete City data
   removeCity(city: City) {
-    this.cityService.removeCity(city.cityId).subscribe(data => {
-      if (data.message == 'Used') {
-        this.toastService.showWarningToast('title', 'the following ' + city.description + ' is Used')
-      } else {
-        this.cityService._cities = this.cityService._cities.filter(data => data.cityId != city.cityId)
-        this.getCity()
-        this.toastService.showSuccessToast('title', 'Success in deleting ' + city.description + ' ')
-      }
-    })
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          this.cityService.removeCity(city.cityId).subscribe(data => {
+            if (data.message == 'Used') {
+              this.toastService.showWarningToast('title', 'the following ' + city.description + ' is Used')
+            } else {
+              this.cityService._cities = this.cityService._cities.filter(data => data.cityId != city.cityId)
+              this.getCity()
+              this.toastService.showSuccessToast('title', 'Success in deleting ' + city.description + ' ')
+            }
+          })
+        }
+      })
   }
 
 }

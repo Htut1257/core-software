@@ -1,7 +1,7 @@
 import { ApiSetting } from './../../../api/app-api-setting';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { JobHistory } from '../../models/job-history.model';
 const httpHeaders = new HttpHeaders({
   'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export class JobHistoryService {
       }
       let uri = `${ApiSetting.payRollApi}/assign/get-JobHis`
       let httpOption = { headers: httpHeaders }
-      this.http.get<JobHistory[]>(uri,httpOption).subscribe(jobHis=>{
-        this._job_his=jobHis
+      this.http.get<JobHistory[]>(uri, httpOption).subscribe(jobHis => {
+        this._job_his = jobHis
         observable.next(jobHis)
         observable.complete()
       })
@@ -42,11 +42,11 @@ export class JobHistoryService {
   }
 
   //delete job history
-  removeJobHistory(id:string):Observable<any>{
-    let uri=`${ApiSetting.payRollApi}/assign/delete-JobHis`
-    let httpParams=new HttpParams().set('id',id)
-    let httpOption={headers:httpHeaders,params:httpParams}
-    return this.http.delete<any>(uri,httpOption)
+  removeJobHistory(id: string): Observable<any> {
+    let uri = `${ApiSetting.payRollApi}/assign/delete-JobHis`
+    let httpParams = new HttpParams().set('id', id)
+    let httpOption = { headers: httpHeaders, params: httpParams }
+    return this.http.delete<any>(uri, httpOption)
   }
 
 }

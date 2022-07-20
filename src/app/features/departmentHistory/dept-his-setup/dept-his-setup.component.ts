@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 import { Department_History } from 'src/app/core/models/dept_his.model';
 import { DepartmentHistoryService } from 'src/app/core/services/department-history/department-history.service';
 import { Department } from 'src/app/core/models/department.model';
@@ -16,29 +16,27 @@ import * as moment from 'moment';
 })
 export class DeptHisSetupComponent implements OnInit {
 
-  deptHis: Department_History = {
-    deptHisId: '',
-    startDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    endDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    remark: '',
-    macId: 0
-  }
+  deptHis: Department_History
   deptHisId: string = ''
   departments: Department[] = []
   employees: Employee[] = []
+  todayDate = moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD')
+  @ViewChild('reactiveForm', { static: true }) reactiveForm: NgForm
   constructor(
     private route: Router,
     private deptHisService: DepartmentHistoryService,
     private departmentService: DepartmentService,
     private employeeService: EmployeeService,
-    private toastService:ToastsService
+    private toastService: ToastsService
   ) { }
 
   deptHisForm = new FormGroup({
-    department: new FormControl('', Validators.required),
-    employee: new FormControl('', Validators.required),
-    startDate: new FormControl(moment(new Date(), 'YYYY-MM-DD'), Validators.required),
-    endDate: new FormControl(moment(new Date(), 'YYYY-MM-DD'), Validators.required)
+    departHisId: new FormControl({ value: '', disabled: true }),
+    remark: new FormControl(''),
+    department: new FormControl(null, Validators.required),
+    employee: new FormControl(null, Validators.required),
+    startDate: new FormControl(this.todayDate, Validators.required),
+    endDate: new FormControl(this.todayDate, Validators.required)
   })
 
   ngOnInit(): void {
@@ -47,7 +45,20 @@ export class DeptHisSetupComponent implements OnInit {
     if (this.deptHisService._dept_his != undefined) {
       this.deptHis = this.deptHisService._dept_his
       this.deptHisId = this.deptHis.deptHisId
+      this.initializeFormData(this.deptHis)
     }
+  }
+
+  //fill form data on edit
+  initializeFormData(data: Department_History) {
+    this.deptHisForm.setValue({
+      departHisId: data.deptHisId,
+      remark: data.remark,
+      department: data.department,
+      employee: data.employee,
+      startDate: data.startDate,
+      endDate: data.endDate
+    })
   }
 
   //get all department
@@ -65,32 +76,28 @@ export class DeptHisSetupComponent implements OnInit {
   }
 
   //add or edit department history
-  onSaveDeptHis() {
- 
-    let startDateVariable = moment(this.deptHis.startDate);
+  onSaveDeptHis(data: any) {
+
+    let startDateVariable = moment(data.startDate);
     let startDateValue = startDateVariable.format('yyyy-MM-DD ');
-    let endDateVariable = moment(this.deptHis.endDate);
+    let endDateVariable = moment(data.endDate);
     let endDateValue = endDateVariable.format('yyyy-MM-DD ');
 
-    const DeptHis = {
-      deptHisId: this.deptHis.deptHisId,
-      department: this.deptHis.department,
-      employee: this.deptHis.employee,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      remark: this.deptHis.remark,
-      macId: 6
-    }
+    let DeptHis = data
+    DeptHis.deptHisId = this.deptHisId
+    DeptHis.startDate = startDateValue
+    DeptHis.endDate = endDateValue
+    DeptHis.macId = 6
     this.deptHisService.saveDepartHistory(DeptHis).subscribe(deptHis => {
       if (this.deptHisId == '') {
         this.deptHisService._dept_history.push(deptHis)
-        this.toastService.showSuccessToast('','Success assigning new Department')
-      }else{
-        this.toastService.showSuccessToast('','Success editing Department assignment')
+        this.toastService.showSuccessToast('', 'Success assigning new Department')
+      } else {
+        this.toastService.showSuccessToast('', 'Success editing Department assignment')
       }
       this.deptHisId = ''
       this.onClear()
-      this.deptHisService._dept_his = this.deptHis
+      this.deptHisService._dept_his = undefined
 
     })
   }
@@ -99,25 +106,22 @@ export class DeptHisSetupComponent implements OnInit {
   onBacktoList() {
     this.deptHisId = ''
     this.onClear()
-    this.deptHisService._dept_his = this.deptHis
+    this.deptHisService._dept_his = undefined
     this.route.navigate(['/main/department-assign']);
   }
 
   //Clear Data
   onClear() {
-    this.clearDeptHitory(this.deptHis, this.deptHisId)
+    this.clearDeptHitory(this.deptHisId)
   }
 
   //clear depatment object
-  clearDeptHitory(deptHis: Department_History, id: string) {
-    deptHis = {
-      deptHisId: id,
-      startDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-      endDate: moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-      remark: '',
-      macId: 0
-    }
-    this.deptHis = deptHis
+  clearDeptHitory( id: string) {
+    this.deptHisForm.reset()
+    this.reactiveForm.resetForm()
+    this.deptHisForm.controls['departHisId'].setValue(id)
+    this.deptHisForm.controls['startDate'].setValue(this.todayDate)
+    this.deptHisForm.controls['endDate'].setValue(this.todayDate)
   }
 
   //compare department data with initial data

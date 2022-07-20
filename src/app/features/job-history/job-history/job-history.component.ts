@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { JobHistory } from 'src/app/core/models/job-history.model';
 import { JobHistoryService } from 'src/app/core/services/job-history/job-history.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-job-history',
   templateUrl: './job-history.component.html',
@@ -16,7 +18,10 @@ export class JobHistoryComponent implements OnInit {
   dataSource!: MatTableDataSource<JobHistory>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route: Router, private jobHisService: JobHistoryService,private toastService:ToastsService) { }
+  constructor(
+    private route: Router, private jobHisService: JobHistoryService,
+    private toastService:ToastsService,public dialog:MatDialog
+    ) { }
 
   ngOnInit(): void {
     this.getJobHistory();
@@ -51,15 +56,21 @@ export class JobHistoryComponent implements OnInit {
 
   //delete  job history
   removeJobHistory(jobHis:JobHistory){
-    this.jobHisService.removeJobHistory(jobHis.jobHisId).subscribe(data=>{
-      if(data.message=="Used"){
-        this.toastService.showWarningToast('','the selected is '+jobHis.jobHisId+' Used')
-        return
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        this.jobHisService.removeJobHistory(jobHis.jobHisId).subscribe(data=>{
+          if(data.message=="Used"){
+            this.toastService.showWarningToast('','the selected is '+jobHis.jobHisId+' Used')
+            return
+          }
+          this.jobHisService._job_his=  this.jobHisService._job_his.filter(data=>data.jobHisId!=jobHis.jobHisId)
+          this.getJobHistory()
+          this.toastService.showSuccessToast('','Success deleting '+jobHis.jobHisId+'')
+        })
       }
-      this.jobHisService._job_his=  this.jobHisService._job_his.filter(data=>data.jobHisId!=jobHis.jobHisId)
-      this.getJobHistory()
-      this.toastService.showSuccessToast('','Success deleting '+jobHis.jobHisId+'')
     })
+   
   }
 
 }

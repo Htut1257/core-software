@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Increment } from 'src/app/core/models/increment.model';
 import { IncrementService } from 'src/app/core/services/increment/increment.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-increment',
   templateUrl: './increment.component.html',
@@ -16,11 +18,16 @@ export class IncrementComponent implements OnInit {
   dataSource!: MatTableDataSource<Increment>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route: Router, private incrementService: IncrementService, private toastService: ToastsService) { }
+  constructor(
+    private route: Router, private incrementService: IncrementService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getIncrement();
   }
+
+  
 
   //get all Increment
   getIncrement() {
@@ -29,7 +36,7 @@ export class IncrementComponent implements OnInit {
       this.dataSource.sort = this.sort
       this.dataSource.filterPredicate = (data: Increment, filter: string) => {
         return data.description.toLowerCase().includes(filter)// ||
-          //data.job.description.toLowerCase().includes(filter)
+        //data.job.description.toLowerCase().includes(filter)
       }
     })
   }
@@ -48,15 +55,21 @@ export class IncrementComponent implements OnInit {
 
   //delete Increment
   removeIncrement(incre: Increment) {
-    this.incrementService.removeIncrement(incre.incrementId).subscribe(data => {
-      if (data.message == "Used") {
-        this.toastService.showWarningToast('','the selected is '+incre.description+' Used')
-        return
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        this.incrementService.removeIncrement(incre.incrementId).subscribe(data => {
+          if (data.message == "Used") {
+            this.toastService.showWarningToast('', 'the selected is ' + incre.description + ' Used')
+            return
+          }
+          this.incrementService._increments = this.incrementService._increments.filter(data => data.incrementId != incre.incrementId)
+          this.getIncrement();
+          this.toastService.showSuccessToast('', 'Success deleting ' + incre.description + ' ')
+        })
       }
-      this.incrementService._increments=this.incrementService._increments.filter(data=>data.incrementId!=incre.incrementId)
-      this.getIncrement();
-      this.toastService.showSuccessToast('','Success deleting '+incre.description+' ')
     })
+  
   }
 
 }

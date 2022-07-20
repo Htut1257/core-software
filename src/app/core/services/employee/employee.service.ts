@@ -27,7 +27,6 @@ export class EmployeeService {
         return observable.complete()
       }
       let uri = `${ApiSetting.payRollApi}/setup/get-Employee`
-      console.log(uri)
       let httpOption = { headers: httpHeader }
       this.http.get<Employee[]>(uri, httpOption).subscribe(employees => {
         this._employees = employees
@@ -39,7 +38,6 @@ export class EmployeeService {
 
   //add or edit employee
   saveEmployee(employee: Employee): Observable<Employee> {
-    console.log(employee)
     let uri = `${ApiSetting.payRollApi}/setup/save-Employee`
     let httpOption = { headers: httpHeader }
     return this.http.post<Employee>(uri, employee, httpOption)
@@ -51,7 +49,6 @@ export class EmployeeService {
     let httpParams = new HttpParams().set('id', id)
     let httpOption = { headers: httpHeader, params: httpParams }
     return this.http.delete<any>(uri, httpOption)
-
   }
 
 }

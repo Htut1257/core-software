@@ -5,7 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Late } from 'src/app/core/models/late.model';
 import { LateService } from 'src/app/core/services/late/late.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-late',
   templateUrl: './late.component.html',
@@ -17,7 +18,10 @@ export class LateComponent implements OnInit {
   dataSource!: MatTableDataSource<Late>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route: Router, private lateService: LateService, private toastService: ToastsService) { }
+  constructor(
+    private route: Router, private lateService: LateService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getLate();
@@ -45,15 +49,21 @@ export class LateComponent implements OnInit {
 
   //delete late
   removeLate(late: Late) {
-    this.lateService.removeLate(late.lateId).subscribe(data => {
-      if (data.message == "Used") {
-        this.toastService.showWarningToast('', 'the selected ' + late.description + ' is Used ')
-        return
-      }
-      this.lateService._lates = this.lateService._lates.filter(data => data.lateId != late.lateId)
-      this.getLate();
-      this.toastService.showSuccessToast('', 'Success deleting ' + late.description + '')
-    })
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          this.lateService.removeLate(late.lateId).subscribe(data => {
+            if (data.message == "Used") {
+              this.toastService.showWarningToast('', 'the selected ' + late.description + ' is Used ')
+              return
+            }
+            this.lateService._lates = this.lateService._lates.filter(data => data.lateId != late.lateId)
+            this.getLate();
+            this.toastService.showSuccessToast('', 'Success deleting ' + late.description + '')
+          })
+        }
+      })
+
   }
 
 }

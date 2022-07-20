@@ -1,71 +1,61 @@
-<mat-card> 
-    <mat-card-title>
-      <div fxLayout="row" fxLayoutGap="10px" class="container">
-        <span>Shift Setup</span>
-      
-        <span fxFlex></span>
-        <button  mat-stroked-button [routerLink]="['/main/leave']" (click)="onBacktoList()">Back</button>
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutGap="10px" class="container">
+      <span>Shift Setup</span>
+
+      <span fxFlex></span>
+      <button mat-stroked-button [routerLink]="['/main/leave']" (click)="onBacktoList()">Back</button>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-divider></mat-divider><br>
+    <form #reactiveForm="ngForm" class="form" role="form" (ngSubmit)="onSaveLeave(leaveForm.value)"
+      [formGroup]="leaveForm">
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Shift ID</mat-label>
+          <input matInput name="leaveId" formControlname="leaveId">
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput name="description" formControlName="description">
+          <mat-error *ngIf="!leaveForm.value.description">Please enter Description</mat-error>
+        </mat-form-field>
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
       </div>
-    </mat-card-title>
-    <mat-card-content>
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Day Count</mat-label>
+          <input matInput name="dayCount" formControlName="dayCount">
+        </mat-form-field>
+        <span fxFlex.lg="55%" fxFlex.md="52%" fxFlex.sm="50%"></span>
+      </div>
+      <div fxLayout="row" fxFlexFill fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px"
+        fxLayoutGap.xs="0%">
+        <span fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <section fxFlex class="example-section">
+          <mat-checkbox class="example-margin" formControlName="active" name="active" color="primary">Active</mat-checkbox>
+        </section>
+        <span fxFlex></span>
+        <span class="title-name">{{ (leaveId=='') ? ' New ':' Edit ' }}</span>
+      </div>
+      <br>
       <mat-divider></mat-divider><br>
-      <form class="form" role="form" (ngSubmit)="onSaveLeave()" [formGroup]="leaveForm" >
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Shift ID</mat-label>
-            <input matInput [(ngModel)]="leave.leaveId" name="leaveId"  [ngModelOptions]="{standalone:true}"
-            disabled="{{ (leaveId=='') ? false:true }}"  
-            >
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline" >
-            <mat-label>Description</mat-label>
-            <input matInput [(ngModel)]="leave.description" name="description" formControlName="description">
-            <mat-error *ngIf="!leaveForm.value.description">Please enter Description</mat-error>
-          </mat-form-field>
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Day Count</mat-label>
-            <input matInput [(ngModel)]="leave.dayCount" name="amount" [ngModelOptions]="{standalone:true}" >
-          </mat-form-field>
-          <span fxFlex.lg="55%" fxFlex.md="52%" fxFlex.sm="50%"></span>
-        </div>
-        <div 
-          fxLayout="row" 
-          fxFlexFill 
-          fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <section fxFlex class="example-section">
-              <mat-checkbox class="example-margin" checked="{{leave.active}}" [ngModelOptions]="{standalone:true}" [(ngModel)]="leave.active" name="active"color="primary">Active</mat-checkbox>
-          </section>
-          <span fxFlex></span>
-          <span class="title-name">{{ (leaveId=='') ? ' New ':' Edit ' }}</span>
-        </div>
-        <br><mat-divider></mat-divider><br>
-        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
-          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
-          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!leaveForm.valid" >
-            {{ (leaveId=='') ? 'Add':'Save' }}
-          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
-          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
-        </div>
-        </form> 
-    </mat-card-content>
-    <mat-card-footer>
-      
-    </mat-card-footer>
-  </mat-card>
-  
+      <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+        <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
+        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" >
+          {{ (leaveId=='') ? 'Add':'Save' }}
+        </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+        <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>

@@ -34,12 +34,6 @@ export class LeaveOpeningService {
     })
   }
 
-  getLeaveOpeningDataRow(){
-
-  }
-
-  
-
   //add or edit leave opening
   saveLeaveOpening(leaveOpening:LeaveOpening):Observable<LeaveOpening>{
     let uri=`${ApiSetting.payRollApi}/approved/save-LeaveOpening`
@@ -47,4 +41,13 @@ export class LeaveOpeningService {
     return this.http.post<LeaveOpening>(uri,leaveOpening,httpOption)
   }
 
+  //delete leave opening
+  removeLeaveOpening(id:string):Observable<any>{
+    let uri=`${ApiSetting.payRollApi}/approved/save-LeaveOpening`
+    let httpParams=new HttpParams().set('id',id)
+    let httpOption={headers:httpHeaders,params:httpParams}
+    return  this.http.delete<any>(uri,httpOption)
+  }
+
 }
+

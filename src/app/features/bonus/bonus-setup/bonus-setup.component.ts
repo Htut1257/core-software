@@ -54,6 +54,7 @@ export class BonusSetupComponent implements OnInit {
   //save or edit Bonus
   onSaveBonus(data: any) {
     let Bonus = data
+    Bonus.bonusId=this.bonusId
     Bonus.macId = 6
     this.bonusService.saveBonus(Bonus).subscribe(bonus => {
       if (this.bonusId == '') {

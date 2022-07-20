@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Job } from 'src/app/core/models/job.model';
 import { JobService } from 'src/app/core/services/job/job.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-job',
   templateUrl: './job.component.html',
@@ -17,8 +19,10 @@ export class JobComponent implements OnInit {
   displayedColumns: string[] = ["position", "code", "description", "payday", "salary", "active", "action"]
   dataSource!: MatTableDataSource<Job>
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-
-  constructor(private route: Router, private jobService: JobService, private toasatService: ToastsService) {
+  constructor(
+    private route: Router, private jobService: JobService,
+    private toasatService: ToastsService, public dialog: MatDialog
+  ) {
 
   }
 
@@ -36,7 +40,7 @@ export class JobComponent implements OnInit {
       this.dataSource.filterPredicate = (data: Job, filter: string) => {
         return data.description.toLocaleLowerCase().includes(filter) ||
           data.jobId.toLocaleLowerCase().includes(filter) //||
-          // data.salary==parseInt(filter) ||
+        // data.salary==parseInt(filter) ||
         //  data.payDay.description.toLocaleLowerCase().includes(filter);
       }
     })
@@ -56,15 +60,21 @@ export class JobComponent implements OnInit {
 
   //delete Job
   removeJob(job: Job) {
-    this.jobService.removeJob(job.jobId).subscribe(data => {
-      if (data.message == "Used") {
-        this.toasatService.showWarningToast('', 'the selected ' + job.description + ' is Used')
-        return
-      }
-      this.jobService._jobs = this.jobService._jobs.filter(data => data.jobId != job.jobId)
-      this.getJob()
-      this.toasatService.showWarningToast('', 'Success deleting ' + job.description + '')
-    })
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(comfirm => {
+        if (confirm) {
+          this.jobService.removeJob(job.jobId).subscribe(data => {
+            if (data.message == "Used") {
+              this.toasatService.showWarningToast('', 'the selected ' + job.description + ' is Used')
+              return
+            }
+            this.jobService._jobs = this.jobService._jobs.filter(data => data.jobId != job.jobId)
+            this.getJob()
+            this.toasatService.showWarningToast('', 'Success deleting ' + job.description + '')
+          })
+        }
+      })
+
   }
 
 }

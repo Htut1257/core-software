@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Increment } from 'src/app/core/models/increment.model';
 import { IncrementService } from 'src/app/core/services/increment/increment.service';
 import { Job } from 'src/app/core/models/job.model';
 import { JobService } from 'src/app/core/services/job/job.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { FormControl,FormGroup,Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-increment-setup',
   templateUrl: './increment-setup.component.html',
@@ -13,96 +13,96 @@ import { FormControl,FormGroup,Validators } from '@angular/forms';
 })
 export class IncrementSetupComponent implements OnInit {
 
-  increment:Increment={
-    incrementId:'',
-    description:'',
-    amount:0,
-    imonth:0,
-    active:true,
-    macId:0,
-  }
-  incrementId:string=''
-  jobs:Job[]=[]
-
-  incrementForm=new FormGroup({
-    description:new FormControl('',Validators.required),
-    job:new FormControl('',Validators.required),
-  })
-
+  increment: Increment
+  incrementId: string = ''
+  jobs: Job[] = []
+  @ViewChild('reactiveForm',{static:true})reactivForm:NgForm
   constructor(
-    private route:Router,
-    private incrementService:IncrementService,
-    private jobService:JobService,private toastService:ToastsService
-    ) {
+    private route: Router,
+    private incrementService: IncrementService,
+    private jobService: JobService, private toastService: ToastsService
+  ) {
 
-    }
+  }
+
+  //form validation
+  incrementForm = new FormGroup({
+    incrementId: new FormControl({ value: '', disabled: true }),
+    description: new FormControl(null, Validators.required),
+    job: new FormControl(null, Validators.required),
+    otMin: new FormControl(0),
+    amount: new FormControl(0),
+    active: new FormControl(true),
+  })
 
   ngOnInit(): void {
     this.getJobs();
-    if(this.incrementService._increment!=undefined){
-      this.increment=this.incrementService._increment
-      this,this.incrementId=this.increment.incrementId
+    if (this.incrementService._increment != undefined) {
+      this.increment = this.incrementService._increment
+      this, this.incrementId = this.increment.incrementId
     }
+  }
+
+  //fill form data on edit
+  initializeFormData(data: Increment) {
+    this.incrementForm.setValue({
+      incrementId: data.incrementId,
+      description: data.description,
+      job: data.job,
+      otMin: data.imonth,
+      amount: data.amount,
+      active: data.active
+    })
   }
 
   //get Job List
-  getJobs(){
-    this.jobService.getJob().subscribe(jobs=>{
-      this.jobs=jobs
+  getJobs() {
+    this.jobService.getJob().subscribe(jobs => {
+      this.jobs = jobs
     })
-  } 
+  }
 
   //add or edit Increment
-  onSaveIncrement(){
-    const Increment={
-      incrementId:this.increment.incrementId,
-      description:this.increment.description,
-      amount:this.increment.amount,
-      imonth:this.increment.imonth,
-      active:this.increment.active,
-      macId:6,
-      job:this.increment.job
-    }
+  onSaveIncrement(data: any) {
+
+    let Increment = data
+    Increment.incrementId = this.incrementId
+    Increment.macId = 6
     console.log(Increment)
-    this.incrementService.saveIncrement(Increment).subscribe(increment=>{
-      if(this.incrementId==''){
+    this.incrementService.saveIncrement(Increment).subscribe(increment => {
+      if (this.incrementId == '') {
         this.incrementService._increments.push(increment)
-        this.toastService.showSuccessToast('','Success adding new Increment')
+        this.toastService.showSuccessToast('', 'Success adding new Increment')
       }
-      else{
-        this.toastService.showSuccessToast('','Success editing Increment')
+      else {
+        this.toastService.showSuccessToast('', 'Success editing Increment')
       }
-      this.incrementId=''
+      this.incrementId = ''
       this.onClear()
-      this.incrementService._increment=this.increment
-     
+      this.incrementService._increment = undefined
+
     })
   }
 
-   //back to Ot list
-   onBacktoList(){
-    this.incrementId=''
+  //back to Ot list
+  onBacktoList() {
+    this.incrementId = ''
     this.onClear()
-    this.incrementService._increment=this.increment
+    this.incrementService._increment =undefined
     this.route.navigate(['/main/increment']);
-   }
-   
-   //Clear Data
-  onClear(){
-    this.clearIncrement(this.increment,this.incrementId)
   }
- 
+
+  //Clear Data
+  onClear() {
+    this.clearIncrement(this.incrementId)
+  }
+
   //clear increment object
-  clearIncrement(incre:Increment,id:string){
-    incre={
-      incrementId:id,
-      description:'',
-      amount:0,
-      imonth:0,
-      active:true,
-      macId:0,
-    }
-    this.increment=incre
+  clearIncrement(id: string) {
+    this.incrementForm.reset();
+    this.reactivForm.resetForm();
+    this.incrementForm.controls['incrementId'].setValue(id)
+    this.incrementForm.controls['active'].setValue(true)
   }
 
   //comapre object in select option tag

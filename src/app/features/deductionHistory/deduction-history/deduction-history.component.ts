@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DeductionHistory } from 'src/app/core/models/deduction-history.model';
 import { DeductionHistoryService } from 'src/app/core/services/deduction-history/deduction-history.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-deduction-history',
   templateUrl: './deduction-history.component.html',
@@ -16,7 +18,10 @@ export class DeductionHistoryComponent implements OnInit {
   dataSource!: MatTableDataSource<DeductionHistory>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route: Router, private deductionHisService: DeductionHistoryService,private toastService:ToastsService) { }
+  constructor(
+    private route: Router, private deductionHisService: DeductionHistoryService,
+    private toastService:ToastsService,public dialog:MatDialog
+    ) { }
 
   ngOnInit(): void {
     this.getDeductionHistory()
@@ -50,15 +55,21 @@ export class DeductionHistoryComponent implements OnInit {
 
   //delete Deduction History
   removeDeduction(deductionHis: DeductionHistory) { 
-    this.deductionHisService.removeDeductionHistory(deductionHis.deductionHisId).subscribe(data=>{
-      if(data.message=="Used"){
-        this.toastService.showWarningToast('','the selected '+deductionHis.deductionHisId+' is Used')
-        return 
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        this.deductionHisService.removeDeductionHistory(deductionHis.deductionHisId).subscribe(data=>{
+          if(data.message=="Used"){
+            this.toastService.showWarningToast('','the selected '+deductionHis.deductionHisId+' is Used')
+            return 
+          }
+          this.deductionHisService._deduction_his=this.deductionHisService._deduction_his.filter(data=>data.deductionHisId!=deductionHis.deductionHisId)
+          this.getDeductionHistory()
+          this.toastService.showSuccessToast('','Success deleting '+deductionHis.deductionHisId+'')
+        })
       }
-      this.deductionHisService._deduction_his=this.deductionHisService._deduction_his.filter(data=>data.deductionHisId!=deductionHis.deductionHisId)
-      this.getDeductionHistory()
-      this.toastService.showSuccessToast('','Success deleting '+deductionHis.deductionHisId+'')
     })
+    
   }
 
 }

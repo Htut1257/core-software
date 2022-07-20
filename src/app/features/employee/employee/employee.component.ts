@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Employee } from 'src/app/core/models/employee.model';
 import { EmployeeService } from 'src/app/core/services/employee/employee.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
@@ -15,7 +17,9 @@ export class EmployeeComponent implements OnInit {
   displayedColumns: string[] = ["position", "code", "description", "phoneNo", "email", "address", "gender", "city", "remark", "active", "action"]
   dataSource!: MatTableDataSource<Employee>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
-  constructor(private route: Router, private employeeService: EmployeeService,private toastService:ToastsService) { }
+  constructor(private route: Router, private employeeService: EmployeeService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getEmployee();
@@ -28,9 +32,9 @@ export class EmployeeComponent implements OnInit {
       this.dataSource = new MatTableDataSource(employees)
       this.dataSource.sort = this.sort
       this.dataSource.filterPredicate = (data: Employee, filter: string) => {
-        return data.description.toLowerCase().includes(filter) //||
-          //data.gender.description.toLowerCase().includes(filter) //||
-         // data.city.description.toLowerCase().includes(filter)
+        return data.description.toLowerCase().includes(filter) ||
+          data.gender.description.toLowerCase().includes(filter) ||
+          data.city.description.toLowerCase().includes(filter)
       }
     })
   }
@@ -48,17 +52,22 @@ export class EmployeeComponent implements OnInit {
   }
 
   //delete Empoyee
-  removeEmployee(emp:Employee){
-    this.employeeService.removeEmployee(emp.employeeId).subscribe(data=>{
-      if(data.message=="Used")
-      {
-        this.toastService.showWarningToast('title','the selected is '+emp.description+' Used')
-        return
-      }
-      this.employeeService._employees=this.employeeService._employees.filter(data=>data.employeeId!=emp.employeeId)
-      this.getEmployee();
-      this.toastService.showSuccessToast('title','Success deleting '+emp.description+' ')
-    })
+  removeEmployee(emp: Employee) {
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          this.employeeService.removeEmployee(emp.employeeId).subscribe(data => {
+            if (data.message == "Used") {
+              this.toastService.showWarningToast('title', 'the selected is ' + emp.description + ' Used')
+              return
+            }
+            this.employeeService._employees = this.employeeService._employees.filter(data => data.employeeId != emp.employeeId)
+            this.getEmployee();
+            this.toastService.showSuccessToast('title', 'Success deleting ' + emp.description + ' ')
+          })
+        }
+      })
+
   }
 
 }

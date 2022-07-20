@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Holiday } from 'src/app/core/models/holiday.model';
 import { HolidayService } from 'src/app/core/services/holiday/holiday.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-holiday',
   templateUrl: './holiday.component.html',
@@ -16,7 +18,10 @@ export class HolidayComponent implements OnInit {
   dataSource!: MatTableDataSource<Holiday>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route: Router, private holidayService: HolidayService, private toastService: ToastsService) { }
+  constructor(
+    private route: Router, private holidayService: HolidayService, 
+    private toastService: ToastsService,public dialog:MatDialog
+    ) { }
 
   ngOnInit(): void {
     this.getHoliday()
@@ -45,15 +50,21 @@ export class HolidayComponent implements OnInit {
 
   //delete Holiday
   removeHoliday(holiday:Holiday){
-    this.holidayService.removeHoliday(holiday.holidayId).subscribe(data=>{
-      if(data.message=="Used"){
-        this.toastService.showWarningToast('','the selected is '+holiday.description+' Used')
-        return
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        this.holidayService.removeHoliday(holiday.holidayId).subscribe(data=>{
+          if(data.message=="Used"){
+            this.toastService.showWarningToast('','the selected is '+holiday.description+' Used')
+            return
+          }
+          this.holidayService._holidays=this.holidayService._holidays.filter(data=>data.holidayId!=holiday.holidayId)
+          this.getHoliday();
+          this.toastService.showSuccessToast('','Success deleting '+holiday.description+'')
+          
+        })
       }
-      this.holidayService._holidays=this.holidayService._holidays.filter(data=>data.holidayId!=holiday.holidayId)
-      this.getHoliday();
-      this.toastService.showSuccessToast('','Success deleting '+holiday.description+'')
-      
     })
+    
   }
 }

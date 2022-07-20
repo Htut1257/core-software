@@ -1,7 +1,7 @@
 import { Department } from 'src/app/core/models/department.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ApiSetting } from 'src/app/api/app-api-setting';
 
 const httpHeader = new HttpHeaders({
@@ -24,7 +24,6 @@ export class DepartmentService {
   getDepartments(): Observable<Department[]> {
     return new Observable(observable => {
       if (this._departments.length > 1) {
-        console.log('service')
         observable.next(this._departments);
         return observable.complete()
       }
@@ -32,17 +31,11 @@ export class DepartmentService {
       let httpOption = { headers: httpHeader }
       this.http.get<Department[]>(uri, httpOption)
         .subscribe((departments: Department[]) => {
-          console.log('api')
           this._departments = departments
           observable.next(departments)
           observable.complete()
         })
     })
-
-    // let uri=`${ApiSetting.payRollApi}/setup/get-Department`
-    // let httpOption={headers:httpHeader}
-    // return this.http.get<Department[]>(uri,httpOption)
-
   }
 
   //add or edit Department data
@@ -53,11 +46,11 @@ export class DepartmentService {
   }
 
   //delete Department  
-  removeDepartment(id:string):Observable<any>{
-    let uri=`${ApiSetting.payRollApi}/setup/delete-Department`
-    let httpParams=new HttpParams().set('id',id)
-    let httpOption={headers:httpHeader,params:httpParams}
-    return this.http.delete<any>(uri,httpOption)
+  removeDepartment(id: string): Observable<any> {
+    let uri = `${ApiSetting.payRollApi}/setup/delete-Department`
+    let httpParams = new HttpParams().set('id', id)
+    let httpOption = { headers: httpHeader, params: httpParams }
+    return this.http.delete<any>(uri, httpOption)
   }
 
 }
