@@ -4,7 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Roster } from 'src/app/core/models/roster.model';
 import { RosterService } from 'src/app/core/services/roster/roster.service';
-import { tick } from '@angular/core/testing';
+import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-roster',
   templateUrl: './roster.component.html',
@@ -15,7 +17,7 @@ export class RosterComponent implements OnInit {
   displayedColumns: string[] = ["position", "shift", "startDate", "endDate", "remark", "action"]
   dataSource!: MatTableDataSource<Roster>
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private route: Router, private rosterService: RosterService) { }
+  constructor(private route: Router, private rosterService: RosterService,private toastService:ToastsService,public dialog:MatDialog) { }
 
   ngOnInit(): void {
     this.getRoster()
@@ -43,7 +45,12 @@ export class RosterComponent implements OnInit {
 
   //delete roster
   removeRoster(roster:Roster){
-
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        
+      }
+    })
   }
 
   //apply filter to table

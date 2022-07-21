@@ -5,7 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Ot } from 'src/app/core/models/ot.model';
 import { OtService } from 'src/app/core/services/ot/ot.service';
-import { } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-ot',
   templateUrl: './ot.component.html',
@@ -13,10 +14,13 @@ import { } from 'src/app/shared/toasts.service';
 })
 export class OtComponent implements OnInit {
   ots: Ot[] = []
-  displayedColumns: string[] = ["position","code", "description", "job", "amount", "otMin", "active","action"]
+  displayedColumns: string[] = ["position", "code", "description", "job", "amount", "otMin", "active", "action"]
   dataSource!: MatTableDataSource<Ot>
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  constructor(private route: Router, private otService: OtService, private toastService: ToastsService) { }
+  constructor(
+    private route: Router, private otService: OtService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getOt();
@@ -48,15 +52,21 @@ export class OtComponent implements OnInit {
 
   //delete Ot
   removeOt(ot: Ot) {
-    this.otService.removeOt(ot.otId).subscribe(data => {
-      if (data.message == "Used") {
-        this.toastService.showWarningToast('', 'the selected is ' + ot.description + ' Used')
-        return
-      }
-      this.otService._ots = this.otService._ots.filter(data => data.otId != ot.otId)
-      this.getOt();
-      this.toastService.showSuccessToast('', 'Success deleting ' + ot.description + '')
-    })
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          this.otService.removeOt(ot.otId).subscribe(data => {
+            if (data.message == "Used") {
+              this.toastService.showWarningToast('', 'the selected is ' + ot.description + ' Used')
+              return
+            }
+            this.otService._ots = this.otService._ots.filter(data => data.otId != ot.otId)
+            this.getOt();
+            this.toastService.showSuccessToast('', 'Success deleting ' + ot.description + '')
+          })
+        }
+      })
+
   }
 
 

@@ -1,31 +1,36 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { ShiftSwappig } from 'src/app/core/models/shift-swapping.model';
 import { SwiftSwappingService } from 'src/app/core/services/swift-swapping/swift-swapping.service';
-
+import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-shift-swapping',
   templateUrl: './shift-swapping.component.html',
   styleUrls: ['./shift-swapping.component.css']
 })
 export class ShiftSwappingComponent implements OnInit {
-  shiftsSwap: ShiftSwappig[]=[]
-  displayedColumns: string[] = ["position","fromEmployee","toEmployee","fromDate","toDate","remark","action"]
+  shiftsSwap: ShiftSwappig[] = []
+  displayedColumns: string[] = ["position", "fromEmployee", "toEmployee", "fromDate", "toDate", "remark", "action"]
   dataSource!: MatTableDataSource<ShiftSwappig>
-  constructor(private route: Router, private shiftSwapService: SwiftSwappingService) { }
+  constructor(
+    private route: Router, private shiftSwapService: SwiftSwappingService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getShiftSwapping();
   }
 
   //get all shft swapping
-  getShiftSwapping(){
-    this.shiftSwapService.getShiftSwapping().subscribe(shiftsSwap=>{
-      this.shiftsSwap=shiftsSwap
+  getShiftSwapping() {
+    this.shiftSwapService.getShiftSwapping().subscribe(shiftsSwap => {
+      this.shiftsSwap = shiftsSwap
       console.log(shiftsSwap)
-      this.dataSource=new MatTableDataSource(shiftsSwap)
-
+      this.dataSource = new MatTableDataSource(shiftsSwap)
     })
   }
 
@@ -43,15 +48,21 @@ export class ShiftSwappingComponent implements OnInit {
 
   //delete Shifft
   removeShift(shift: ShiftSwappig) {
-    // this.shiftSwapService.removeShift(shift.shiftId).subscribe(data => {
-    //   if (data.message == "Used") {
-    //     this.toastService.showWarningToast('', 'the selected ' + shift.description + ' is Used')
-    //     return
-    //   }
-    //   this.shiftService._shifts = this.shiftService._shifts.filter(data => data.shiftId != shift.shiftId)
-    //   this.getShift();
-    //   this.toastService.showSuccessToast('', 'Success deleting ' + shift.description + ' ')
-    // })
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          // this.shiftSwapService.removeShift(shift.shiftId).subscribe(data => {
+          //   if (data.message == "Used") {
+          //     this.toastService.showWarningToast('', 'the selected ' + shift.description + ' is Used')
+          //     return
+          //   }
+          //   this.shiftService._shifts = this.shiftService._shifts.filter(data => data.shiftId != shift.shiftId)
+          //   this.getShift();
+          //   this.toastService.showSuccessToast('', 'Success deleting ' + shift.description + ' ')
+          // })
+        }
+      })
+
   }
 
 }

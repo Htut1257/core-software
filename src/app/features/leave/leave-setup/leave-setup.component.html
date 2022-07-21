@@ -48,7 +48,7 @@
       <mat-divider></mat-divider><br>
       <div class="form-field" fxLayout="row" fxLayoutGap="20px">
         <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
-        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" >
+        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!leaveForm.valid">
           {{ (leaveId=='') ? 'Add':'Save' }}
         </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
         <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>

@@ -9,7 +9,7 @@
     </mat-card-title>
     <mat-card-content>
         <mat-divider></mat-divider><br>
-        <form class="form" role="form" (ngSubmit)="onSaveShift(shiftForm.value)" [formGroup]="shiftForm">
+        <form #reactiveForm="ngForm" class="form" role="form" (ngSubmit)="onSaveShift(shiftForm.value)" [formGroup]="shiftForm">
             <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
                 fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
                 <span fxFlex.lg="10%" fxFlex.md="5%"></span>
@@ -21,6 +21,7 @@
                 <mat-form-field fxFlex appearance="outline">
                     <mat-label>Description</mat-label>
                     <input matInput name="description" formControlName="description">
+                    <mat-error *ngIf="!shiftForm.value.description">Please Enter Description</mat-error>
                 </mat-form-field>
                 <span fxFlex.lg="10%" fxFlex.md="5%"></span>
             </div>

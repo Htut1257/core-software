@@ -4,6 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { LeaveOpening } from 'src/app/core/models/leave-opening.model';
 import { LeaveOpeningService } from 'src/app/core/services/leave-opening/leave-opening.service';
+import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-leave-opening',
   templateUrl: './leave-opening.component.html',
@@ -13,7 +16,10 @@ export class LeaveOpeningComponent implements OnInit {
   leavesOpening: LeaveOpening[] = []
   displayedColumns: string[] = ["position", "code", "employee", "leave", "dayCount", "date", "action"]
   dataSource!: MatTableDataSource<LeaveOpening>
-  constructor(private route: Router, private leaveOpeningService: LeaveOpeningService) {
+  constructor(
+    private route: Router, private leaveOpeningService: LeaveOpeningService,
+    private toastService:ToastsService,public dialog:MatDialog
+    ) {
 
   }
 
@@ -38,7 +44,12 @@ export class LeaveOpeningComponent implements OnInit {
 
   // delete Leave Opening
   removeLeaveOpening(row:LeaveOpening){
-
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        
+      }
+    })
   }
 
   //apply filter to table

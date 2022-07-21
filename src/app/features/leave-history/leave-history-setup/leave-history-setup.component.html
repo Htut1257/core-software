@@ -1,103 +1,95 @@
-<mat-card> 
-    <mat-card-title>
-      <div fxLayout="row" fxLayoutGap="10px" class="container">
-        <span>Leaves Assign Setup</span>
-      
-        <span fxFlex></span>
-        <button  mat-stroked-button [routerLink]="['/main/leave-assign']" (click)="onBacktoList()">Back</button>
-      </div>
-    </mat-card-title>
-    <mat-card-content>
-      <mat-divider></mat-divider><br>
-      <form class="form" role="form" (ngSubmit)="onSaveLeaveHistory()" [formGroup]="leaveHisForm" >
-        <div 
-          fxLayout="row" 
-          fxFlexFill fxLayout.lt-sm="column" 
-          fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Leave Assign ID</mat-label>
-            <input matInput [(ngModel)]="leaveHis.leaveHisId" name="leaveHisId"  [ngModelOptions]="{standalone:true}"
-            disabled="{{ (leaveHisId=='') ? false:true }}"  
-            >
-          </mat-form-field>
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <mat-form-field fxFlex  appearance="outline" >
-            <mat-label>Remark</mat-label>
-            <input matInput [(ngModel)]="leaveHis.remark" name="remark"  [ngModelOptions]="{standalone:true}">
-          </mat-form-field>
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-        fxLayout="row" 
-        fxFlexFill fxLayout.lt-sm="column" 
-        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-      >
+<mat-card>
+  <mat-card-title>
+    <div fxLayout="row" fxLayoutGap="10px" class="container">
+      <span>Leaves Assign Setup</span>
+
+      <span fxFlex></span>
+      <button mat-stroked-button [routerLink]="['/main/leave-assign']" (click)="onBacktoList()">Back</button>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-divider></mat-divider><br>
+    <form #reactiveForm="ngForm" class="form" role="form" (ngSubmit)="onSaveLeaveHistory(leaveHisForm.value)"
+      [formGroup]="leaveHisForm">
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
+        fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        <mat-form-field fxFlex  appearance="outline">
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Leave Assign ID</mat-label>
+          <input matInput name="leaveHisId" formControlName="leaveHisId">
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Remark</mat-label>
+          <input matInput name="remark" formControlName="remark">
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+      </div>
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
+        fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
           <mat-label>Leave </mat-label>
-          <mat-select [(ngModel)]="leaveHis.leave" name="leave" formControlName="leave" [compareWith]="compareLeave" >
+          <mat-select name="leave" formControlName="leave" [compareWith]="compareLeave">
             <mat-option *ngFor="let item of leaves" [value]="item">
               {{item.description}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="!leaveHisForm.value.leave">Please Select Leave</mat-error>
         </mat-form-field>
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Employee</mat-label>
-            <mat-select [(ngModel)]="leaveHis.employee" name="employee" formControlName="employee" [compareWith]="compareEmployee" >
-              <mat-option *ngFor="let item of employees" [value]="item">
-                {{item.description}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-        fxLayout="row" 
-        fxFlexFill fxLayout.lt-sm="column" 
-        fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-      >
-        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        <mat-form-field fxFlex  appearance="outline">
-            <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="picker1" [(ngModel)]="leaveHis.startDate" formControlName="startDate" name="startDate"  >
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Employee</mat-label>
+          <mat-select name="employee" formControlName="employee" [compareWith]="compareEmployee">
+            <mat-option *ngFor="let item of employees" [value]="item">
+              {{item.description}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!leaveHisForm.value.employee">Please Select Employee</mat-error>
         </mat-form-field>
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        <mat-form-field fxFlex  appearance="outline">
-            <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="picker2" [(ngModel)]="leaveHis.endDate" formControlName="endDate" name="endDate"  >
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
+      </div>
+      <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
+        fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="startDate" name="startDate">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <mat-error *ngIf="!leaveHisForm.value.startDate">Please Select Date</mat-error>
         </mat-form-field>
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-        </div>
-        <div 
-          fxLayout="row" 
-          fxFlexFill 
-          fxLayout.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%"
-        >
-          <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
-          <span fxFlex></span>
-          <span class="title-name">{{ (leaveHisId=='') ? ' New ':' Edit ' }}</span>
-        </div>
-        <br><mat-divider></mat-divider><br>
-        <div class="form-field" fxLayout="row" fxLayoutGap="20px">
-          <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm ></span>
-          <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit" [disabled]="!leaveHisForm.valid" >
-            {{ (leaveHisId=='') ? 'Add':'Save' }}
-          </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
-          <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()" >Clear</button>
-        </div>
-        </form> 
-    </mat-card-content>
-    <mat-card-footer>
-      
-    </mat-card-footer>
-  </mat-card>
-  
+        <mat-form-field fxFlex appearance="outline">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="picker2" formControlName="endDate" name="endDate">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <mat-error *ngIf="!leaveHisForm.value.endDate">Please Select Date</mat-error>
+        </mat-form-field>
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+      </div>
+      <div fxLayout="row" fxFlexFill fxLayout.gt-lg="10px" fxLayoutGap.lg="10px" fxLayoutGap.md="10px"
+        fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
+        <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
+        <span fxFlex></span>
+        <span class="title-name">{{ (leaveHisId=='') ? ' New ':' Edit ' }}</span>
+      </div>
+      <br>
+      <mat-divider></mat-divider><br>
+      <div class="form-field" fxLayout="row" fxLayoutGap="20px">
+        <span fxFlex.lt-xl fxFlex.gt-lg fxHide.lt-sm></span>
+        <button #saveCustomer fxFlex.lt-sm mat-flat-button color="primary" type="submit"
+          >
+          {{ (leaveHisId=='') ? 'Add':'Save' }}
+        </button><!-- fxFlex.gt-sm fxFlex.gt-xs fxFlex.lt-sm -->
+        <button mat-stroked-button fxFlex.lt-sm color="primary" type="button" (click)="onClear()">Clear</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>

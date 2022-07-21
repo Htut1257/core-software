@@ -5,6 +5,8 @@ import { LeaveHistory } from 'src/app/core/models/leave-history.model';
 import { LeaveHistoryService } from 'src/app/core/services/leave-history/leave-history.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-leave-history',
   templateUrl: './leave-history.component.html',
@@ -12,10 +14,13 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class LeaveHistoryComponent implements OnInit {
   leaveHis: LeaveHistory[] = []
-  displayedColumns: string[] = ["position","code", "leave", "employee", "startDate", "endDate", "remark","action"]
+  displayedColumns: string[] = ["position", "code", "leave", "employee", "startDate", "endDate", "remark", "action"]
   dataSource!: MatTableDataSource<LeaveHistory>
   @ViewChild(MatSort, { static: true }) sort!: MatSort
-  constructor(private route: Router, private leaveHisService: LeaveHistoryService,private toastService:ToastsService) { }
+  constructor(
+    private route: Router, private leaveHisService: LeaveHistoryService,
+     private toastService: ToastsService,public dialog:MatDialog
+     ) { }
 
   ngOnInit(): void {
     this.getLeaveHistory();
@@ -27,9 +32,9 @@ export class LeaveHistoryComponent implements OnInit {
       this.dataSource = new MatTableDataSource(leaveHis)
       this.dataSource.sort = this.sort
       this.dataSource.filterPredicate = (data: LeaveHistory, filter: string) => {
-        // return data.employee.description.toLowerCase().includes(filter) ||
-        //   data.leave.description.toLowerCase().includes(filter) ||
-        return  data.startDate.toLowerCase().includes(filter) ||
+        return data.employee.description.toLowerCase().includes(filter) ||
+          data.leave.description.toLowerCase().includes(filter) ||
+          data.startDate.toLowerCase().includes(filter) ||
           data.endDate.toLowerCase().includes(filter)
       }
     })
@@ -41,7 +46,7 @@ export class LeaveHistoryComponent implements OnInit {
     this.leaveHisService._leaveHis = leaveHis;
   }
 
-  
+
 
   //apply filter to table
   applyFilter(event: any) {
@@ -50,16 +55,20 @@ export class LeaveHistoryComponent implements OnInit {
   }
 
   //delete leave history
-  removeLeavehis(leaveHis:LeaveHistory){
-    this.leaveHisService.removeLeaveHis(leaveHis.leaveHisId).subscribe(data=>{
-      if(data.message=="Used"){
-        this.toastService.showWarningToast('','the selected '+leaveHis.leaveHisId+' is Used')
-        return
+  removeLeavehis(leaveHis: LeaveHistory) {
+    this.dialog.open(DialogComponent)
+    .afterClosed().subscribe(confirm=>{
+      if(confirm){
+        this.leaveHisService.removeLeaveHis(leaveHis.leaveHisId).subscribe(data => {
+          if (data.message == "Used") {
+            this.toastService.showWarningToast('', 'the selected ' + leaveHis.leaveHisId + ' is Used')
+            return
+          }
+          this.leaveHisService._leave_his = this.leaveHisService._leave_his.filter(data => data.leaveHisId != leaveHis.leaveHisId)
+          this.getLeaveHistory()
+          this.toastService.showSuccessToast('', 'Success deleting ' + leaveHis.leaveHisId + '')
+        })
       }
-      this.leaveHisService._leave_his=this.leaveHisService._leave_his.filter(data=>data.leaveHisId!=leaveHis.leaveHisId)
-      this.getLeaveHistory()
-      this.toastService.showSuccessToast('','Success deleting '+leaveHis.leaveHisId+'')
     })
   }
-
 }

@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { Shift } from 'src/app/core/models/shift.model';
 import { ShiftService } from 'src/app/core/services/shift/shift.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-shift',
   templateUrl: './shift.component.html',
@@ -13,10 +15,13 @@ import { ToastsService } from 'src/app/shared/toasts.service';
 export class ShiftComponent implements OnInit {
   shifts: Shift[] = []
   dataSource!: MatTableDataSource<Shift>
-  displayedColumns: string[] = ["position","code", "description", "startTime","endTime", "Days","action"]
+  displayedColumns: string[] = ["position", "code", "description", "startTime", "endTime", "Days", "action"]
   @ViewChild(MatSort, { static: true }) sort!: MatSort
 
-  constructor(private route:Router,private shiftService: ShiftService,private toastService:ToastsService) { }
+  constructor(
+    private route: Router, private shiftService: ShiftService,
+    private toastService: ToastsService, public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getShift();
@@ -44,16 +49,22 @@ export class ShiftComponent implements OnInit {
   }
 
   //delete Shifft
-  removeShift(shift:Shift){
-    this.shiftService.removeShift(shift.shiftId).subscribe(data=>{
-      if(data.message=="Used"){
-        this.toastService.showWarningToast('','the selected '+shift.description+' is Used')
-        return 
-      }
-      this.shiftService._shifts=this.shiftService._shifts.filter(data=>data.shiftId!=shift.shiftId)
-      this.getShift();
-      this.toastService.showSuccessToast('','Success deleting '+shift.description+' ')
-    })
+  removeShift(shift: Shift) {
+    this.dialog.open(DialogComponent)
+      .afterClosed().subscribe(confirm => {
+        if (confirm) {
+          this.shiftService.removeShift(shift.shiftId).subscribe(data => {
+            if (data.message == "Used") {
+              this.toastService.showWarningToast('', 'the selected ' + shift.description + ' is Used')
+              return
+            }
+            this.shiftService._shifts = this.shiftService._shifts.filter(data => data.shiftId != shift.shiftId)
+            this.getShift();
+            this.toastService.showSuccessToast('', 'Success deleting ' + shift.description + ' ')
+          })
+        }
+      })
+
   }
 
 }

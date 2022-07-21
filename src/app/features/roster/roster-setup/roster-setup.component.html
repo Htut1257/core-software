@@ -8,7 +8,7 @@
     </mat-card-title>
     <mat-card-content>
         <mat-divider></mat-divider><br>
-        <form class="form" role="form" [formGroup]="shiftForm" (ngSubmit)="onSaveRoster()">
+        <form #reactiveForm="ngForm" class="form" role="form" [formGroup]="shiftForm" (ngSubmit)="onSaveRoster()">
             <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
                 fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
                 <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>

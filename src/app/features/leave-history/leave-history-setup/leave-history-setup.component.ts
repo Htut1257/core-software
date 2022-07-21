@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { LeaveHistory } from 'src/app/core/models/leave-history.model';
 import { LeaveHistoryService } from 'src/app/core/services/leave-history/leave-history.service';
 import { Uleave } from 'src/app/core/models/uleave.model';
@@ -16,16 +16,12 @@ import * as moment from 'moment'
 })
 export class LeaveHistorySetupComponent implements OnInit {
 
-  leaveHis: LeaveHistory ={
-    leaveHisId: '',
-    startDate:  moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    endDate:  moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    remark: '',
-    macId: 0
-  }
+  leaveHis: LeaveHistory 
   leaveHisId: string = ''
   leaves: Uleave[] = []
   employees: Employee[] = []
+  todayDate=moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD')
+  @ViewChild('reactiveForm',{static:true})reactiveForm:NgForm
   constructor(
     private route: Router,
     private leaveHisService: LeaveHistoryService,
@@ -34,11 +30,14 @@ export class LeaveHistorySetupComponent implements OnInit {
     private toastService: ToastsService
   ) { }
 
+  //form Validation
   leaveHisForm = new FormGroup({
+    leaveHisId:new FormControl({value:'',disabled:true}),
     leave: new FormControl(null, Validators.required),
     employee: new FormControl(null, Validators.required),
-    startDate: new FormControl( moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'), Validators.required),
-    endDate: new FormControl( moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'), Validators.required),
+    startDate: new FormControl( this.todayDate, Validators.required),
+    endDate: new FormControl(this.todayDate, Validators.required),
+    remark:new FormControl('')
   })
 
   ngOnInit(): void {
@@ -47,7 +46,20 @@ export class LeaveHistorySetupComponent implements OnInit {
     if (this.leaveHisService._leaveHis != undefined) {
       this.leaveHis = this.leaveHisService._leaveHis
       this.leaveHisId = this.leaveHis.leaveHisId
+      this.initializeFromData(this.leaveHis)
     }
+  }
+
+  //fill form data on edit
+  initializeFromData(data:LeaveHistory){
+    this.leaveHisForm.setValue({
+      leaveHisId:data.leaveHisId,
+      leave:data.leave,
+      employee:data.employee,
+      startDate:data.startDate,
+      endDate:data.endDate,
+      remark:data.remark
+    })
   }
 
   //get Leave List
@@ -65,20 +77,16 @@ export class LeaveHistorySetupComponent implements OnInit {
   }
 
   //add or edit Leave History 
-  onSaveLeaveHistory() {
+  onSaveLeaveHistory(data:any) {
     let startDateVariable = moment(this.leaveHis.startDate);
     let startDateValue = startDateVariable.format('YYYY-MM-DD');
     let endDateVariable = moment(this.leaveHis.endDate);
     let endDateValue = endDateVariable.format('YYYY-MM-DD');
-    const LeaveHistory = {
-      leaveHisId: this.leaveHis.leaveHisId,
-      leave: this.leaveHis.leave,
-      employee: this.leaveHis.employee,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      remark: this.leaveHis.remark,
-      macId: 6
-    }
+
+    let LeaveHistory=data
+    LeaveHistory.leaveHisId=this.leaveHisId
+    LeaveHistory.macId=6
+ 
     this.leaveHisService.saveLeaveHistory(LeaveHistory).subscribe(leaveHis => {
       if (this.leaveHisId == '') {
         this.leaveHisService._leave_his.push(leaveHis)
@@ -88,7 +96,7 @@ export class LeaveHistorySetupComponent implements OnInit {
       }
       this.leaveHisId = ''
       this.onClear();
-      this.leaveHisService._leaveHis = this.leaveHis
+      this.leaveHisService._leaveHis = undefined
 
     })
   }
@@ -97,26 +105,23 @@ export class LeaveHistorySetupComponent implements OnInit {
   onBacktoList() {
     this.leaveHisId = ''
     this.onClear();
-    this.leaveHisService._leaveHis = this.leaveHis
+    this.leaveHisService._leaveHis = undefined
     this.route.navigate(['/main/leave-assign']);
   }
 
   //Clear Data
   onClear() {
     this.leaveHisForm.reset()
-    this.clearLeaveHis(this.leaveHis, this.leaveHisId)
+    this.clearLeaveHis( this.leaveHisId)
   }
 
   //clear Leave history object
-  clearLeaveHis(leaveHis: LeaveHistory, id: string) {
-    leaveHis = {
-      leaveHisId: id,
-      startDate:  moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-      endDate:  moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD'),
-      remark: '',
-      macId: 0
-    }
-    this.leaveHis = leaveHis
+  clearLeaveHis( id: string) {
+      this.leaveHisForm.reset()
+      this.reactiveForm.resetForm()
+      this.leaveHisForm.controls['leaveHisId'].setValue(id)
+      this.leaveHisForm.controls['startDate'].setValue(this.todayDate)
+      this.leaveHisForm.controls['endDate'].setValue(this.todayDate)
   }
 
   //compare Leave data with initial data

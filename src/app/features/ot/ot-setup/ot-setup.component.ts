@@ -1,34 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Ot } from 'src/app/core/models/ot.model';
 import { Job } from 'src/app/core/models/job.model';
 import { OtService } from 'src/app/core/services/ot/ot.service';
 import { JobService } from 'src/app/core/services/job/job.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-ot-setup',
   templateUrl: './ot-setup.component.html',
   styleUrls: ['./ot-setup.component.css']
 })
 export class OtSetupComponent implements OnInit {
-  initialOt: Ot = {
-    otId: '',
-    description: '',
-    otMin: 0,
-    amount: 0,
-    active: true,
-    macId: 0,
-
-  }
-  ot: Ot = this.initialOt
+  ot: Ot
   otId: string = ''
   jobs: Job[] = []
+  @ViewChild('reactiveForm', { static: true }) reactiveForm: NgForm
   constructor(private route: Router, private otService: OtService, private jobService: JobService, private toastService: ToastsService) { }
 
+  //form Validation
   otForm = new FormGroup({
+    otId: new FormControl({ value: '', disabled: true }),
     description: new FormControl('', Validators.required),
-    job: new FormControl('', Validators.required),
+    job: new FormControl(null, Validators.required),
+    otMin: new FormControl(0),
+    amount: new FormControl(0),
+    active: new FormControl(true)
   })
 
   ngOnInit(): void {
@@ -36,8 +33,21 @@ export class OtSetupComponent implements OnInit {
     if (this.otService._ot != undefined) {
       this.ot = this.otService._ot
       this.otId = this.ot.otId
+      this.initializeFromData(this.ot)
     }
 
+  }
+
+  //fill form data on edit
+  initializeFromData(data: Ot) {
+    this.otForm.setValue({
+      otId: data.otId,
+      description: data.description,
+      job: data.job,
+      otMin: data.otMin,
+      amount: data.amount,
+      active: data.active
+    })
   }
 
   //get Job List
@@ -48,16 +58,11 @@ export class OtSetupComponent implements OnInit {
   }
 
   //add or edit Ot
-  onSaveOt() {
-    const Ot = {
-      otId: this.ot.otId,
-      description: this.ot.description,
-      otMin: this.ot.otMin,
-      amount: this.ot.amount,
-      active: this.ot.active,
-      macId: 6,
-      job: this.ot.job
-    }
+  onSaveOt(data: any) {
+    let Ot = data
+    Ot.otId = this.otId
+    Ot.macId = 6
+
     this.otService.saveOt(Ot).subscribe(ot => {
       if (this.otId == '') {
         this.otService._ots.push(ot);
@@ -67,7 +72,7 @@ export class OtSetupComponent implements OnInit {
       }
       this.otId = ''
       this.onClear()
-      this.otService._ot = this.ot
+      this.otService._ot = undefined
 
     })
   }
@@ -76,26 +81,21 @@ export class OtSetupComponent implements OnInit {
   onBacktoList() {
     this.otId = ''
     this.onClear()
-    this.otService._ot = this.ot
+    this.otService._ot = undefined
     this.route.navigate(['/main/ot']);
   }
 
   //Clear Data
   onClear() {
-    this.clearOt(this.ot, this.otId)
+    this.clearOt(this.otId)
   }
 
   //clear ot object
-  clearOt(ot: Ot, id: string) {
-    ot = {
-      otId: id,
-      description: '',
-      otMin: 0,
-      amount: 0,
-      active: true,
-      macId: 0,
-    }
-    this.ot = ot
+  clearOt(id: string) {
+    this.otForm.reset()
+    this.reactiveForm.resetForm()
+    this.otForm.controls['otId'].setValue(id)
+    this.otForm.controls['active'].setValue(true)
   }
 
   //comapre object in select option tag

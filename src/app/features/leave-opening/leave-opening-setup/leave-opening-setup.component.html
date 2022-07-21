@@ -9,14 +9,14 @@
   </mat-card-title>
   <mat-card-content>
     <mat-divider></mat-divider><br>
-    <form class="form" role="form" (ngSubmit)="onSaveLeaveOpening(leaveOpeningForm.value)"
+    <form #reactiveForm="ngForm" class="form" role="form" (ngSubmit)="onSaveLeaveOpening(leaveOpeningForm.value)"
       [formGroup]="leaveOpeningForm">
       <div fxLayout="row" fxFlexFill fxLayout.lt-sm="column" fxLayoutGap.gt-lg="10px" fxLayoutGap.lg="10px"
         fxLayoutGap.md="10px" fxLayoutGap.sm="10px" fxLayoutGap.xs="0%">
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
         <mat-form-field fxFlex appearance="outline">
           <mat-label>Leave Assign ID</mat-label>
-          <input matInput name="leaveHisId" disabled="{{ (leaveOpeningId=='') ? false:true }}">
+          <input matInput name="leaveOpenId" formControlName="leaveOpenId">
         </mat-form-field>
         <span fxFlex.gt-lg="10%" fxFlex.lg="10%" fxFlex.md="5%"></span>
         <mat-form-field fxFlex appearance="outline">

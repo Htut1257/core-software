@@ -8,6 +8,7 @@ import { RosterDetail } from 'src/app/core/models/roster.model';
 import { RosterService } from 'src/app/core/services/roster/roster.service';
 import { Shift } from 'src/app/core/models/shift.model';
 import { ShiftService } from 'src/app/core/services/shift/shift.service';
+import { ToastsService } from 'src/app/shared/toasts.service';
 import * as moment from 'moment'
 export const Column = [
   {
@@ -37,7 +38,6 @@ export const Column = [
   },
 ]
 
-
 @Component({
   selector: 'app-roster-setup',
   templateUrl: './roster-setup.component.html',
@@ -55,6 +55,9 @@ export class RosterSetupComponent implements OnInit {
   shifts: Shift[] = []
   rosterDetail: RosterDetail[] = []
   rosterId: string = ''
+  todatDate=moment(new Date(), 'MM/DD/YYYY').format('YYYY-MM-DD')
+
+
   @ViewChild(MatSort) sort!: MatSort
   displayedColumns: string[] = Column.map(data => data.key)
   dataSource: any;
@@ -67,6 +70,7 @@ export class RosterSetupComponent implements OnInit {
     startDate:new FormControl('',Validators.required),
     endDate:new FormControl('',Validators.required)
   })
+
 
   ngOnInit(): void {
     this.getShift()
